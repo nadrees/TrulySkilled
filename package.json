@@ -1,0 +1,23 @@
+{
+  "author": "Nathen Drees",
+  "name": "trulyskilled",
+  "description": "Source for trulyskilled wesite",
+  "version": "0.0.0",
+  "repository": {
+    "url": ""
+  },
+  "main": "server.js",
+  "dependencies": {
+    "express": "~3.2.5"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-watch": "~0.4.3",
+    "jshint": "~2.1.2",
+    "grunt-contrib-jshint": "~0.5.4"
+  },
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
