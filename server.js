@@ -1,10 +1,24 @@
-var express = require('express');
+var port = 8888;
 
-var app = express();
+var express = require('express'),
+	cons = require('consolidate'),
+	swig = require('swig'),
+	app = express();
 
-app.get('/', function(req, res) {
-	res.end('Hello world!');
+app.engine('.html', cons.swig);
+app.set('view engine', 'html');
+
+swig.init({
+	root: __dirname + '/views',
+	allowError: true
 });
 
-app.listen(8000);
-console.log('Listening on port 8000');
+app.set('views', __dirname + '/views/pages');
+app.set('view options', { layout: false });
+
+app.get('/', function(req, res) {
+	res.render('index');
+});
+
+app.listen(port);
+console.log('listening on port ' + port);
