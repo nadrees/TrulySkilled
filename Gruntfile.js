@@ -2,7 +2,7 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		watch: {
 			scripts: {
-				files: ['Gruntfile.js', 'server.js', 'src/**/*.js', 'views/**/*.html'],
+				files: ['Gruntfile.js', 'server.js', 'lib/**/*.js', 'views/**/*.html'],
 				tasks: ['jshint'],
 				options: {
 					interrupt: true
@@ -10,7 +10,7 @@ module.exports = function(grunt) {
 			}
 		},
 		jshint: {
-			all: ['Gruntfile.js', 'server.js', 'src/**/*.js']
+			all: ['Gruntfile.js', 'server.js', 'lib/**/*.js']
 		}
 	});
 
