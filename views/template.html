@@ -3,7 +3,16 @@
 		<title>TrulySkilled</title>
 	</head>
 	<body>
-		<div id="header"></div>
-		<div id="content">{% block content %}{%endblock %}</div>
+		<div id="header">
+            
+        </div>
+
+        {% if flash %}
+        <div id="flash">
+            {{ flash }}
+        </div>
+        {% endif %}
+		
+        <div id="content">{% block content %}{%endblock %}</div>
 	</body>
 </html>
