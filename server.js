@@ -8,6 +8,7 @@ var express = require('express'),
     flash = require('connect-flash'),
     passport = require('passport'),
     GoogleStragey = require('passport-google').Strategy,
+    fs = require('fs'),
     controllers = require('./lib/controllers'),
     passportMiddleware = require('./lib/passport-middleware');
 
@@ -28,7 +29,8 @@ app.configure(function() {
     app.use(express.logger());
     app.use(express.cookieParser());
     app.use(express.bodyParser());
-    app.use(express.session({ secret: 'NRz9H2T#deVaNCBw^QWh4PjyM@4atjHzc1EtSAOjphBilM#xjs*6e*6dkoRYfptMtE6W6jNBw6D$uLadGQg!eZU7%X7qApz0tx2a' }));
+    app.use(express.session({ secret: fs.readFileSync('./lib/.session', 'utf8') }));
+    app.use(express.csrf());
     app.use(flash());
     app.use(passport.initialize());
     app.use(passport.session());
