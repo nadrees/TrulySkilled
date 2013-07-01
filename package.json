@@ -12,13 +12,17 @@
     "consolidate": "~0.9.1",
     "swig": "~0.13.5",
     "passport": "~0.1.17",
-    "passport-google": "~0.3.0"
+    "passport-google": "~0.3.0",
+    "mongoose": "~3.6.13"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-watch": "~0.4.3",
     "jshint": "~2.1.2",
-    "grunt-contrib-jshint": "~0.5.4"
+    "grunt-contrib-jshint": "~0.5.4",
+    "grunt-nodemon": "0.0.7",
+    "grunt-concurrent": "~0.3.0",
+    "grunt-env": "~0.4.0"
   },
   "optionalDependencies": {},
   "engines": {

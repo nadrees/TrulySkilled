@@ -5,24 +5,31 @@ var express = require('express'),
     app = express(),
     cons = require('consolidate'),
     swig = require('swig'),
-    flash = require('connect-flash'),
+    fs = require('fs'),
     passport = require('passport'),
     GoogleStragey = require('passport-google').Strategy,
-    fs = require('fs'),
+    mongoose = require('mongoose'),
     controllers = require('./lib/controllers'),
     passportMiddleware = require('./lib/passport-middleware');
 
 var openIdReturnUrl = '';
 var realm = '';
+var dbConnectionString = '';
 
 app.configure('dev', function() {
     console.log('configuring for development');
 
     openIdReturnUrl = 'http://localhost:' + port + '/auth/google/return';
     realm = 'http://localhost:' + port;
+    dbConnectionString = 'mongodb://localhost/trulyskilled';
 
     configured = true;
 });
+
+if (!configured) {
+    console.log('ERROR: env specific configuration not called');
+    process.exit(1);
+}
 
 app.configure(function() {
     app.use(express.static('public'));
@@ -31,7 +38,6 @@ app.configure(function() {
     app.use(express.bodyParser());
     app.use(express.session({ secret: fs.readFileSync('./lib/.session', 'utf8') }));
     app.use(express.csrf());
-    app.use(flash());
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(app.router);
@@ -47,6 +53,7 @@ app.configure(function() {
     app.set('views', __dirname + '/views/pages');
     app.set('view options', { layout: false });
 
+    /* passport setup */
     passport.use(new GoogleStragey({
             returnURL: openIdReturnUrl,
             realm: realm
@@ -55,12 +62,17 @@ app.configure(function() {
     ));
     passport.serializeUser(passportMiddleware.serializeUser);
     passport.deserializeUser(passportMiddleware.deserializeUser);
-});
 
-if (!configured) {
-    console.log('ERROR: env specific configuration not called');
-    process.exit(1);
-}
+    /* mongoose setup */
+    mongoose.connect(dbConnectionString);
+    var db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    db.once('open', function() {
+        // start server
+        app.listen(port);
+        console.log('listening on port ' + port);
+    });
+});
 
 app.get('/', controllers.index);
 app.get('/auth/google', passport.authenticate('google'));
@@ -69,6 +81,3 @@ app.get('/auth/google/return', passport.authenticate('google', {
     failureRedirect: '/',
     failureFlash: true
 }));
-
-app.listen(port);
-console.log('listening on port ' + port);

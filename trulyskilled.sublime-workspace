@@ -3,26 +3,38 @@
 	{
 		"selected_items":
 		[
+			[
+				"passpo",
+				"passportMiddleware"
+			],
+			[
+				"openI",
+				"openIdReturnUrl"
+			],
+			[
+				"open",
+				"OpenId"
+			],
+			[
+				"conf",
+				"configure"
+			],
+			[
+				"confg",
+				"configured"
+			],
+			[
+				"norm",
+				"normalizedElem"
+			],
+			[
+				"nor",
+				"normalizedElem"
+			]
 		]
 	},
 	"buffers":
 	[
-		{
-			"file": "Gruntfile.js",
-			"settings":
-			{
-				"buffer_size": 441,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "server.js",
-			"settings":
-			{
-				"buffer_size": 178,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -48,6 +60,27 @@
 	},
 	"file_history":
 	[
+		"/home/nathen/Documents/TrulySkilled/lib/controllers.js",
+		"/home/nathen/Documents/TrulySkilled/lib/passport-middleware.js",
+		"/home/nathen/Documents/TrulySkilled/server.js",
+		"/home/nathen/Documents/TrulySkilled/views/template.html",
+		"/home/nathen/Documents/TrulySkilled/.gitignore",
+		"/home/nathen/Documents/TrulySkilled/lib/.session",
+		"/home/nathen/Documents/TrulySkilled/views/pages/index.html",
+		"/home/nathen/Documents/TrulySkilled/views/pages/failure.html",
+		"/home/nathen/.config/sublime-text-2/Packages/Default/Preferences.sublime-settings",
+		"/home/nathen/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
+		"/home/nathen/Documents/TrulySkilled/lib/configure.js",
+		"/home/nathen/Documents/TrulySkilled/README.md",
+		"/home/nathen/Documents/TrulySkilled/Gruntfile.js",
+		"/home/nathen/Documents/TrulySkilled/views/template.tpl",
+		"/home/nathen/Documents/TrulySkilled/package.json",
+		"/home/nathen/Documents/TrulySkilled/src/views.js",
+		"/home/nathen/Documents/TrulySkilled/lib/express-plates.js",
+		"/home/nathen/Documents/TrulySkilled/npm-install-globals.sh",
+		"/home/nathen/Documents/TrulySkilled/src/express-plates.js",
+		"/home/nathen/Documents/TrulySkilled/trulyskilled.sublime-project",
+		"/home/nathen/Documents/TrulySkilled/trulyskilled.sublime-workspace",
 		"/home/nadrees/Dropbox/Node/trulyskilled/package.json",
 		"/home/nadrees/Dropbox/Node/trulyskilled/Gruntfile.js",
 		"/home/nadrees/Dropbox/Node/trulyskilled/views/template.html",
@@ -73,6 +106,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"config",
+			"\n		views[elem] = fs.readFileSync(viewPath + '/' + elem, 'utf-8');"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -90,62 +125,8 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "Gruntfile.js",
-					"settings":
-					{
-						"buffer_size": 441,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								441,
-								441
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "server.js",
-					"settings":
-					{
-						"buffer_size": 178,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								175,
-								175
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],
