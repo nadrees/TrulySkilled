@@ -81,3 +81,4 @@ app.get('/auth/google/return', passport.authenticate('google', {
     failureRedirect: '/',
     failureFlash: true
 }));
+app.get('/logout', controllers.logout);

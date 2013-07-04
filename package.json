@@ -13,7 +13,8 @@
     "swig": "~0.13.5",
     "passport": "~0.1.17",
     "passport-google": "~0.3.0",
-    "mongoose": "~3.6.13"
+    "mongoose": "~3.6.13",
+    "connect-flash": "~0.1.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

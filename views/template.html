@@ -1,18 +1,54 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 	<head>
 		<title>TrulySkilled</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Bootstrap -->
+        <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	</head>
 	<body>
-		<div id="header">
-            
+        <div class="container">
+            <div class="row">
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <a class="brand" href="/">TrulySkilled</a>
+                        <ul class="nav pull-right">
+                        {% if user %}
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    {{ user.displayName }}
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/user">My Profile</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="/logout">Log Out</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li><a href="/auth/google">Log In With Google</a></li>
+                        {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            {% if flash.error %}
+            <div class="row">
+                <div class="alert">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Error:</strong> {{ flash.error }}
+                </div>
+            </div>
+            {% endif %}
+    		
+            <div class="row">
+                <div id="content span12">{% block content %}{%endblock %}</div>
+            </div>
         </div>
 
-        {% if flash %}
-        <div id="flash">
-            {{ flash }}
-        </div>
-        {% endif %}
-		
-        <div id="content">{% block content %}{%endblock %}</div>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+        <script src="/bootstrap/js/bootstrap.min.js"></script>
 	</body>
 </html>

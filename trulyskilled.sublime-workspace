@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"passpor",
+				"passportMiddleware"
+			],
+			[
 				"passpo",
 				"passportMiddleware"
 			],
@@ -35,6 +39,30 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "lib/models.js",
+			"settings":
+			{
+				"buffer_size": 482,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib/passport-middleware.js",
+			"settings":
+			{
+				"buffer_size": 1105,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "server.js",
+			"settings":
+			{
+				"buffer_size": 2395,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -61,8 +89,15 @@
 	"file_history":
 	[
 		"/home/nathen/Documents/TrulySkilled/lib/controllers.js",
-		"/home/nathen/Documents/TrulySkilled/lib/passport-middleware.js",
 		"/home/nathen/Documents/TrulySkilled/server.js",
+		"/home/nathen/Documents/TrulySkilled/lib/passport-middleware.js",
+		"/home/nathen/Documents/TrulySkilled/Gruntfile.js",
+		"/home/nathen/Documents/TrulySkilled/machine-setup.sh",
+		"/home/nathen/Downloads/h5bp-html5-boilerplate-defe483/404.html",
+		"/home/nathen/Downloads/h5bp-html5-boilerplate-defe483/css/main.css",
+		"/home/nathen/Downloads/h5bp-html5-boilerplate-defe483/index.html",
+		"/home/nathen/Downloads/h5bp-html5-boilerplate-defe483/css/normalize.css",
+		"/home/nathen/Documents/TrulySkilled/package.json",
 		"/home/nathen/Documents/TrulySkilled/views/template.html",
 		"/home/nathen/Documents/TrulySkilled/.gitignore",
 		"/home/nathen/Documents/TrulySkilled/lib/.session",
@@ -72,9 +107,7 @@
 		"/home/nathen/.config/sublime-text-2/Packages/User/Preferences.sublime-settings",
 		"/home/nathen/Documents/TrulySkilled/lib/configure.js",
 		"/home/nathen/Documents/TrulySkilled/README.md",
-		"/home/nathen/Documents/TrulySkilled/Gruntfile.js",
 		"/home/nathen/Documents/TrulySkilled/views/template.tpl",
-		"/home/nathen/Documents/TrulySkilled/package.json",
 		"/home/nathen/Documents/TrulySkilled/src/views.js",
 		"/home/nathen/Documents/TrulySkilled/lib/express-plates.js",
 		"/home/nathen/Documents/TrulySkilled/npm-install-globals.sh",
@@ -125,8 +158,91 @@
 	"groups":
 	[
 		{
+			"selected": 1,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "lib/models.js",
+					"settings":
+					{
+						"buffer_size": 482,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								215,
+								215
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "lib/passport-middleware.js",
+					"settings":
+					{
+						"buffer_size": 1105,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								13,
+								33
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "server.js",
+					"settings":
+					{
+						"buffer_size": 2395,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2070,
+								2070
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 663.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -186,6 +302,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 150.0,
+	"side_bar_width": 151.0,
 	"status_bar_visible": true
 }
