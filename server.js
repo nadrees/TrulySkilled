@@ -8,6 +8,7 @@ var express = require('express'),
     fs = require('fs'),
     passport = require('passport'),
     GoogleStragey = require('passport-google').Strategy,
+    flash = require('connect-flash'),
     mongoose = require('mongoose'),
     controllers = require('./lib/controllers'),
     passportMiddleware = require('./lib/passport-middleware');
@@ -36,8 +37,12 @@ app.configure(function() {
     app.use(express.logger());
     app.use(express.cookieParser());
     app.use(express.bodyParser());
-    app.use(express.session({ secret: fs.readFileSync('./lib/.session', 'utf8') }));
+    app.use(express.session({ 
+        secret: fs.readFileSync('./lib/.session', 'utf8'),
+        cookie: { maxAge: 60000 }
+    }));
     app.use(express.csrf());
+    app.use(flash());
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(app.router);
@@ -82,3 +87,4 @@ app.get('/auth/google/return', passport.authenticate('google', {
     failureFlash: true
 }));
 app.get('/logout', controllers.logout);
+app.get('/user', controllers.user.index);
