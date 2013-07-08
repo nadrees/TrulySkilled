@@ -6,4 +6,4 @@ select yn in "Yes" "No"; do
 		No ) exit;
 	esac
 done
-sudo add-apt-repository ppa:chris-lea/node.js && sudo apt-get update && sudo apt-get install python-software-properties nodejs mongodb && sudo npm install -g nodemon && sudo npm install -g grunt-cli
+sudo add-apt-repository ppa:chris-lea/node.js && sudo apt-get update && sudo apt-get install python-software-properties nodejs mongodb && sudo npm install -g grunt-cli && sudo npm install -g mocha

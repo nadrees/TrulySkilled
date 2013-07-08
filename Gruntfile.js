@@ -5,13 +5,14 @@ module.exports = function(grunt) {
 				// shared options hash
 			},
 			dev: {
-				NODE_ENV: 'dev'
+				NODE_ENV: 'dev',
+				PORT: '8888'
 			}
-		},
+		}, 
 		watch: {
 			scripts: {
-				files: ['Gruntfile.js', 'server.js', 'lib/**/*.js', 'views/**/*.html'],
-				tasks: ['jshint'],
+				files: ['Gruntfile.js', 'server.js', 'lib/**/*.js', 'views/**/*.html', 'test/**/*.js'],
+				tasks: ['jshint', 'mochaTest'],
 				options: {
 					interrupt: true
 				}
@@ -20,24 +21,22 @@ module.exports = function(grunt) {
 		jshint: {
 			all: ['Gruntfile.js', 'server.js', 'lib/**/*.js']
 		},
-		nodemon: {
-			dev: {}
-		},
-		concurrent: {
-			target: {
-				tasks: ['watch', 'nodemon'],
+		mochaTest: {
+			test: {
 				options: {
-					logConcurrentOutput: true
-				}
+					reporter: 'dot',
+					growl: true,
+					ignoreLeaks: false
+				},
+				src: 'test/integration-tests.js'
 			}
 		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.loadNpmTasks('grunt-concurrent');
-	grunt.loadNpmTasks('grunt-nodemon');
 	grunt.loadNpmTasks('grunt-env');
+	grunt.loadNpmTasks('grunt-mocha-test');
 
-	grunt.registerTask('default', ['env:dev', 'concurrent:target']);
+	grunt.registerTask('default', ['env:dev', 'mochaTest', 'watch']);
 };

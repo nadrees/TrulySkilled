@@ -1,4 +1,4 @@
-var port = 8888;
+var port = process.env.PORT;
 var configured = false;
 
 var express = require('express'),
@@ -88,3 +88,5 @@ app.get('/auth/google/return', passport.authenticate('google', {
 }));
 app.get('/logout', controllers.logout);
 app.get('/user', controllers.user.index);
+
+module.exports = app;
