@@ -83,16 +83,6 @@ db.once('open', function() {
 /*******************
 /****** Routes *****
 *******************/
-function requireLoggedInUser(req, res, loggedInFunction) {
-    if (!req.isAuthenticated()) {
-        req.flash('error', 'You must be logged in to view this page.');
-        res.redirect('/');
-    }
-    else {
-        loggedInFunction(req, res);
-    }
-}
-
 app.get('/', controllers.index);
 app.get('/auth/google', passport.authenticate('google'));
 app.get('/auth/google/return', passport.authenticate('google', {
@@ -101,10 +91,6 @@ app.get('/auth/google/return', passport.authenticate('google', {
     failureFlash: true
 }));
 app.get('/logout', controllers.logout);
-app.get('/user', function(req, res) {
-    requireLoggedInUser(req, res, function(req, res) {
-        controllers.user.index(req, res);
-    });
-});
+app.get('/user', controllers.user.index);
 
 module.exports = app;

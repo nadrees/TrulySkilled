@@ -8,7 +8,7 @@ var request = require('supertest'),
     shared = helpers.shared,
     User = require(path.join(process.cwd(), 'lib', 'models.js')).User;
 
-describe('', function() {
+describe('integration tests', function() {
 
     beforeEach(function() {
         this.user = new User({_id:1, googleToken: 'test'});
