@@ -1,42 +1,52 @@
 var request = require('supertest'),
-    superagent = require('superagent'),
     path = require('path'),
+    should = require('should'),
     app = require(path.join(process.cwd(),'server.js')),
-    passportMock = require(path.join(process.cwd(), 'test', 'passport-mock.js'));
+    helpers = require(path.join(process.cwd(), 'test', 'helpers', 'integration-test-helper.js')),
+    dbHelpers = require(path.join(process.cwd(), 'test', 'helpers', 'db-helper.js')),
+    logInUser = helpers.logInUser,
+    shared = helpers.shared,
+    User = require(path.join(process.cwd(), 'lib', 'models.js')).User;
 
-function logInUser(app) {
-    passportMock(app, {
-        passAuthentication: true,
-        userId: 1
-    });
-    request(app)
-        .get('mock/login')
-        .end(function(err, result) {
-            if (!err) {
-                agent.saveCookies(result.res);
-            }
-            else {
-                return err;
-            }
-        });
-}
+describe('', function() {
 
-describe('GET /', function() {
-    var agent = superagent.agent();
-
-    it('should allow annonymous access', function(done) {
-        var req = request(app).get('/');
-        req.expect(200, done);
+    beforeEach(function() {
+        this.user = new User({_id:1, googleToken: 'test'});
     });
 
-    it('should allow authenticated access', function(done) {
-        var err = logInUser(app);
-        if (err) 
-            done(err);
-        else {
+
+    describe('GET /', function() {
+        it('should allow annonymous access', function(done) {
             var req = request(app).get('/');
-            agent.attachCookies(req);
             req.expect(200, done);
-        }
+        });
+
+        it('should allow authenticated access', function(done) {
+            logInUser(this.user);
+            var req = request(app).get('/');
+            req.expect(200, done);
+        });
+    });
+
+    describe('GET /user', function() {
+        describe('with no logged in user', function() {
+
+            beforeEach(function() {
+                this.req = request(app).get('/user');
+            });
+
+            shared.shouldRejectAndRedirect();
+        });
+
+        describe('with logged in user', function() {
+            beforeEach(function() {
+                logInUser(this.user);
+                this.req = request(app).get('/user');
+            });
+
+            it('should allow access', function(done) {
+                this.req.expect(200, done);
+            });
+        });
     });
 });

@@ -1,5 +1,5 @@
 # install nodejs from latest
-echo "This script will add the nodejs ppa to your list of sources and install the latest nodejs build, mongodb, nodemon and grunt-cli. Do you want to continue?"
+echo "This script will add the nodejs ppa to your list of sources and install the latest nodejs build, mongodb, mocha, and grunt-cli. Do you want to continue?"
 select yn in "Yes" "No"; do
 	case $yn in
 		Yes ) break;;

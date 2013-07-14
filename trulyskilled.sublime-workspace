@@ -40,18 +40,18 @@
 	"buffers":
 	[
 		{
-			"file": "lib/models.js",
+			"file": "lib/controllers.js",
 			"settings":
 			{
-				"buffer_size": 482,
+				"buffer_size": 862,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "lib/passport-middleware.js",
+			"file": "views/template.html",
 			"settings":
 			{
-				"buffer_size": 1105,
+				"buffer_size": 2159,
 				"line_ending": "Unix"
 			}
 		},
@@ -59,7 +59,15 @@
 			"file": "server.js",
 			"settings":
 			{
-				"buffer_size": 2395,
+				"buffer_size": 2620,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib/passport-middleware.js",
+			"settings":
+			{
+				"buffer_size": 1117,
 				"line_ending": "Unix"
 			}
 		}
@@ -88,9 +96,11 @@
 	},
 	"file_history":
 	[
-		"/home/nathen/Documents/TrulySkilled/lib/controllers.js",
-		"/home/nathen/Documents/TrulySkilled/server.js",
+		"/home/nathen/Documents/TrulySkilled/public/bootstrap/img/glyphicons-halflings-white.png",
+		"/home/nathen/Documents/TrulySkilled/lib/models.js",
 		"/home/nathen/Documents/TrulySkilled/lib/passport-middleware.js",
+		"/home/nathen/Documents/TrulySkilled/server.js",
+		"/home/nathen/Documents/TrulySkilled/lib/controllers.js",
 		"/home/nathen/Documents/TrulySkilled/Gruntfile.js",
 		"/home/nathen/Documents/TrulySkilled/machine-setup.sh",
 		"/home/nathen/Downloads/h5bp-html5-boilerplate-defe483/404.html",
@@ -158,28 +168,30 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "lib/models.js",
+					"file": "lib/controllers.js",
 					"settings":
 					{
-						"buffer_size": 482,
+						"buffer_size": 862,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								215,
-								215
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -189,18 +201,74 @@
 				},
 				{
 					"buffer": 1,
-					"file": "lib/passport-middleware.js",
+					"file": "views/template.html",
 					"settings":
 					{
-						"buffer_size": 1105,
+						"buffer_size": 2159,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13,
-								33
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 51.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "server.js",
+					"settings":
+					{
+						"buffer_size": 2620,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 816.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "lib/passport-middleware.js",
+					"settings":
+					{
+						"buffer_size": 1117,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								692,
+								692
 							]
 						],
 						"settings":
@@ -211,34 +279,6 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "server.js",
-					"settings":
-					{
-						"buffer_size": 2395,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2070,
-								2070
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 663.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -302,6 +342,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 151.0,
+	"side_bar_width": 265.0,
 	"status_bar_visible": true
 }
