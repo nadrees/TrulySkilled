@@ -36,7 +36,6 @@ if (!configured) {
     process.exit(1);
 }
 
-app.use(express.static('public'));
 app.use(express.cookieParser());
 app.use(express.bodyParser());
 app.use(express.session({ 
@@ -47,7 +46,6 @@ app.use(express.csrf());
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(app.router);
 
 app.engine('.html', cons.swig);
 app.set('view engine', 'html');
@@ -92,5 +90,7 @@ app.get('/auth/google/return', passport.authenticate('google', {
 }));
 app.get('/logout', controllers.logout);
 app.get('/user', controllers.user.index);
+
+app.use(express.static('public'));
 
 module.exports = app;
