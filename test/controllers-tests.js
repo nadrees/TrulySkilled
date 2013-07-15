@@ -11,6 +11,9 @@ var request = function() {
     var self = this;
 
     self.flashes = {};
+    self.session = {
+        _csrf: ''
+    };
 
     return self;
 };
@@ -140,6 +143,26 @@ describe('controllers', function() {
                 });
 
                 shared.shouldRedirect('/');
+            });
+
+            describe('with a logged in user', function() {
+                var user;
+
+                beforeEach(function() {
+                    user = new User({ googleToken: 'test', displayName: 'test' });
+                    logInUser(this.req, user);
+                    controllers.user.index(this.req, this.res);
+                });
+
+                shared.shouldAllowAccess();
+                shared.shouldRender('user');
+
+                it('should pass the correct user arguments', function() {
+                    should.exist(this.res.view.args.user);
+                    should.exist(this.res.view.args.user.displayName);
+
+                    this.res.view.args.user.displayName.should.equal(user.displayName);
+                });
             });
         });
     });

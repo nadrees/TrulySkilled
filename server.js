@@ -11,6 +11,7 @@ var express = require('express'),
     GoogleStragey = require('passport-google').Strategy,
     flash = require('connect-flash'),
     mongoose = require('mongoose'),
+    winston = require('winston'),
     controllers = require('./lib/controllers'),
     passportMiddleware = require('./lib/passport-middleware');
 
@@ -24,9 +25,9 @@ if (app.get('env') === 'dev' || app.get('env') === 'test') {
     configured = true;
 }
 
-if (app.get('env') === 'production') {
-    // get traffic logs
-    app.use(express.logger());
+if (app.get('env') === 'production' || app.get('env') === 'dev') {
+    var logStream = fs.createWriteStream('./traffic.log');
+    app.use(express.logger({stream: logStream}));
 
     configured = true;
 }
@@ -36,11 +37,22 @@ if (!configured) {
     process.exit(1);
 }
 
+winston.add(winston.transports.File, {
+    filename: 'logs.log',
+    maxsize: 1073741824, // 1 MB
+    maxFiles: 10
+});
+// middleware for injecting objects into req and res
+app.use(function(req, res, next) {
+    req.logger = winston;
+    next();
+});
+
+// finish setting up middleware
 app.use(express.cookieParser());
 app.use(express.bodyParser());
 app.use(express.session({ 
-    secret: fs.readFileSync('./lib/.session', 'utf8'),
-    cookie: { maxAge: 60000 }
+    secret: fs.readFileSync('./lib/.session', 'utf8')
 }));
 app.use(express.csrf());
 app.use(flash());
@@ -52,7 +64,8 @@ app.set('view engine', 'html');
 
 swig.init({
     root: __dirname + '/views',
-    allowError: true
+    allowError: true,
+    cache: app.get('env') === 'production'
 });
 
 app.set('views', __dirname + '/views/pages');
@@ -75,7 +88,7 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
     // start server
     app.listen(port);
-    console.log('listening on port ' + port);
+    winston.log('info', 'listening on port %d', port);
 });
 
 /*******************
@@ -90,6 +103,7 @@ app.get('/auth/google/return', passport.authenticate('google', {
 }));
 app.get('/logout', controllers.logout);
 app.get('/user', controllers.user.index);
+app.post('/user', controllers.user.update);
 
 app.use(express.static('public'));
 
