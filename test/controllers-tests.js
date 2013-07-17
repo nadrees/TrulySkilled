@@ -1,77 +1,12 @@
 var path = require('path'),
     controllers = require(path.join(process.cwd(), 'lib', 'controllers.js')),
-    User = require(path.join(process.cwd(), 'lib', 'models.js')).User,
-    should = require('should');
-
-function logInUser(req, user) {
-    req.user = user;
-}
-
-var request = function() {
-    var self = this;
-
-    self.flashes = {};
-    self.session = {
-        _csrf: ''
-    };
-
-    return self;
-};
-request.prototype.flash = function(type, message) {
-    if (message === undefined) {
-        return this.flashes[type];
-    }
-    else {
-        this.flashes[type] = message;
-    }
-};
-request.prototype.isAuthenticated = function() {
-    return this.user !== undefined && this.user !== null;
-};
-request.prototype.logout = function() {
-    this.user = null;
-};
-
-var response = function() {
-    var self = this;
-
-    var redirectLocation;
-
-    return self;
-};
-response.prototype.redirect = function(path) {
-    this.redirectLocation = path;
-};
-response.prototype.render = function(name, args) {
-    this.view = {
-        name: name,
-        args: args
-    };
-};
-
-var shared = {
-    shouldAllowAccess: function() {
-        it('should allow access', function() {
-            should.exist(this.res.view);
-            should.exist(this.res.view.name);
-            should.exist(this.res.view.args);
-        });
-    },
-    shouldRender: function(name) {
-        it('should render ' + name, function() {
-            this.res.view.name.should.equal(name);
-        });
-    },
-    shouldRedirect: function(name) {
-        it('should redirect to ' + name, function() {
-            should.not.exist(this.res.view);
-            should.exist(this.res.redirectLocation);
-            this.res.redirectLocation.should.equal(name);
-        });
-    }
-};
+    should = require('should'),
+    shared = require(path.join(process.cwd(), 'test', 'helpers', 'controllers-test-helper.js')),
+    request = shared.request,
+    response = shared.response;
 
 describe('controllers', function() {
+
     beforeEach(function() {
         this.req = new request();
         this.res = new response();
@@ -91,8 +26,8 @@ describe('controllers', function() {
             var user;
 
             beforeEach(function() {
-                user = new User({ googleToken: 'test', displayName: 'test' });
-                logInUser(this.req, user);
+                user = shared.createTestUser();
+                shared.logInUser(this.req, user);
                 controllers.index(this.req, this.res);
             });
 
@@ -122,8 +57,8 @@ describe('controllers', function() {
             var user;
 
             beforeEach(function() {
-                user = new User({ googleToken: 'test', displayName: 'test' });
-                logInUser(this.req, user);
+                user = shared.createTestUser();
+                shared.logInUser(this.req, user);
                 controllers.logout(this.req, this.res);
             });
 
@@ -138,19 +73,17 @@ describe('controllers', function() {
     describe('user controller', function() {
         describe('index action', function() {
             describe('with no logged in user', function() {
-                beforeEach(function() {
+                shared.shouldRejectLoggedInUser(function() {
                     controllers.user.index(this.req, this.res);
                 });
-
-                shared.shouldRedirect('/');
             });
 
             describe('with a logged in user', function() {
                 var user;
 
                 beforeEach(function() {
-                    user = new User({ googleToken: 'test', displayName: 'test' });
-                    logInUser(this.req, user);
+                    user = shared.createTestUser();
+                    shared.logInUser(this.req, user);
                     controllers.user.index(this.req, this.res);
                 });
 
@@ -163,6 +96,18 @@ describe('controllers', function() {
 
                     this.res.view.args.user.displayName.should.equal(user.displayName);
                 });
+            });
+        });
+
+        describe('update action', function() {
+            describe('with no logged in user', function() {
+                shared.shouldRejectLoggedInUser(function() {
+                    controllers.user.update(this.req, this.res);
+                });
+            });
+
+            describe('with a logged in user', function() {
+
             });
         });
     });
