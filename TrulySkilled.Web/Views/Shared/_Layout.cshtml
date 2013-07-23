@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title - TrulySkilled.com</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        @Styles.Render("~/Content/bootstrap")
+        @RenderSection("styles", required: false)
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="navbar navbar-inverse span12">
+                    <div class="navbar-inner">
+                        <a class="brand" href="/">TrulySkilled</a>
+                        <ul class="nav pull-right">
+                        @if(!User.Identity.IsAuthenticated) {
+                            <li>
+                                @Html.ActionLink("Log In", "LogIn", "Account")
+                            </li>
+                        }
+                        else {
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    @User.Identity.Name
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Manage Account", "Manage", "Account")</li>
+                                    <li class="divider"></li>
+                                    <li>@Html.ActionLink("Log Out", "LogOff", "Account")</li>
+                                </ul>
+                            </li>
+                        }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span12">
+                @RenderBody()
+                </div>
+            </div>
+        </div>
+
+        @Scripts.Render("~/bundles/jquery")
+        <script type="text/javascript">
+            if (typeof jQuery == 'undefined') {
+                var e = document.createElement('script');
+                e.src = '@Url.Content("~/Scripts/jquery/jquery-1.10.2.js")';
+                e.type = 'text/javascript';
+                document.getElementsByTagName("head")[0].appendChild(e);
+            }
+        </script>
+
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

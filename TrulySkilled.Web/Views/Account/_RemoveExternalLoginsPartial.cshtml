@@ -1,0 +1,38 @@
+﻿@model ICollection<TrulySkilled.Web.Models.ExternalLogin>
+
+@section styles{
+    @Styles.Render("~/Content/zocial")
+}
+
+@if (Model.Count > 0)
+{
+    <h4>Registered External Logins</h4>
+    <table>
+        <tbody>
+        @foreach (TrulySkilled.Web.Models.ExternalLogin externalLogin in Model)
+        {
+            <tr>
+                <td>
+                    <span class="zocial @externalLogin.ProviderDisplayName.ToLower()">
+                        @externalLogin.ProviderDisplayName
+                    </span>
+                </td>
+                <td>
+                    @if (ViewBag.ShowRemoveButton)
+                    {
+                        using (Html.BeginForm("Disassociate", "Account"))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div>
+                                @Html.Hidden("provider", externalLogin.Provider)
+                                @Html.Hidden("providerUserId", externalLogin.ProviderUserId)
+                                <input type="submit" value="Remove" title="Remove this @externalLogin.ProviderDisplayName credential from your account" />
+                            </div>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

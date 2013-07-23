@@ -1,0 +1,38 @@
+﻿@model ICollection<AuthenticationClientData>
+
+@{
+    List<TrulySkilled.Web.Models.ExternalLogin> logins = ViewBag.ExternalLogins;
+}
+
+@using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = ViewBag.ReturnUrl }))
+{
+@Html.AntiForgeryToken()
+<fieldset id="socialLoginList">
+@if (logins == null || logins.Count != Model.Count)
+{
+    if (ViewBag.IsManage)
+    {
+    <legend>Select an additional service to link it to your account.</legend>
+    }
+    else
+    {
+    <legend>Select a service below to log in.</legend>
+    }
+
+    <p>
+    @foreach (AuthenticationClientData p in Model)
+    {
+        if (logins == null || !logins.Where(l => l.ProviderDisplayName == p.DisplayName).Any())
+        {
+        <button type="submit" name="provider" 
+            value="@p.AuthenticationClient.ProviderName" 
+            class="zocial @p.AuthenticationClient.ProviderName.ToLower()" 
+            title="Log in using your @p.DisplayName account">
+            @p.DisplayName
+        </button>
+        }
+    }
+    </p>
+}
+</fieldset>
+}

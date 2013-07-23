@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Manage Account";
+}
+
+@section styles{
+    @Styles.Render("~/Content/zocial")
+}
+
+<p class="message-success">@ViewBag.StatusMessage</p>
+
+<h3>
+    @User.Identity.Name
+</h3>
+
+<section id="externalLogins">
+    @Html.Action("RemoveExternalLogins")
+    <hr />
+    @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl, IsManage = true })
+</section>

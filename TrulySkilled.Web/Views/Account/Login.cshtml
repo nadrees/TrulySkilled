@@ -1,0 +1,11 @@
+﻿@section styles{
+    @Styles.Render("~/Content/zocial")
+}
+
+@{
+    ViewBag.Title = "Log In";
+}
+
+<section class="social" id="socialLoginForm">
+    @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
+</section>
