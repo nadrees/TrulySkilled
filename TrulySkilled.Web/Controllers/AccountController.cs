@@ -10,6 +10,7 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using TrulySkilled.Web.Filters;
 using TrulySkilled.Web.Models;
+using TrulySkilled.Web.ViewModels.Account;
 
 namespace TrulySkilled.Web.Controllers
 {
@@ -17,16 +18,16 @@ namespace TrulySkilled.Web.Controllers
     [InitializeSimpleMembership]
     public class AccountController : Controller
     {
-        //
-        // GET: /Account/Login
-
+        #region Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
+        #endregion
 
+        #region LogOff
         [HttpGet]
         public ActionResult LogOff()
         {
@@ -34,10 +35,9 @@ namespace TrulySkilled.Web.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+        #endregion
 
-        //
-        // POST: /Account/Disassociate
-
+        #region Disassociate
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Disassociate(string provider, string providerUserId)
@@ -63,10 +63,9 @@ namespace TrulySkilled.Web.Controllers
 
             return RedirectToAction("Manage", new { Message = message });
         }
+        #endregion
 
-        //
-        // GET: /Account/Manage
-
+        #region Manage
         public ActionResult Manage(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
@@ -76,10 +75,9 @@ namespace TrulySkilled.Web.Controllers
             ViewBag.ReturnUrl = Url.Action("Manage");
             return View();
         }
+        #endregion
 
-        //
-        // POST: /Account/ExternalLogin
-
+        #region ExternalLogin
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -87,9 +85,6 @@ namespace TrulySkilled.Web.Controllers
         {
             return new ExternalLoginResult(provider, Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
         }
-
-        //
-        // GET: /Account/ExternalLoginCallback
 
         [AllowAnonymous]
         public ActionResult ExternalLoginCallback(string returnUrl)
@@ -102,6 +97,7 @@ namespace TrulySkilled.Web.Controllers
 
             if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
             {
+
                 return RedirectToLocal(returnUrl);
             }
 
@@ -121,9 +117,6 @@ namespace TrulySkilled.Web.Controllers
             }
         }
 
-        //
-        // POST: /Account/ExternalLoginConfirmation
-
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -140,7 +133,7 @@ namespace TrulySkilled.Web.Controllers
             if (ModelState.IsValid)
             {
                 // Insert a new user into the database
-                using (UsersContext db = new UsersContext())
+                using (TrulySkilledDbContext db = new TrulySkilledDbContext())
                 {
                     UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
                     // Check if user already exists
@@ -167,9 +160,6 @@ namespace TrulySkilled.Web.Controllers
             return View(model);
         }
 
-        //
-        // GET: /Account/ExternalLoginFailure
-
         [AllowAnonymous]
         public ActionResult ExternalLoginFailure()
         {
@@ -195,6 +185,7 @@ namespace TrulySkilled.Web.Controllers
             ViewBag.ShowRemoveButton = externalLogins.Count > 1 || OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
             return PartialView("_RemoveExternalLoginsPartial", externalLogins);
         }
+        #endregion
 
         #region Helpers
         private List<ExternalLogin> GetExternalLogins()

@@ -25,11 +25,11 @@ namespace TrulySkilled.Web.Filters
         {
             public SimpleMembershipInitializer()
             {
-                Database.SetInitializer<UsersContext>(null);
+                Database.SetInitializer<TrulySkilledDbContext>(null);
 
                 try
                 {
-                    using (var context = new UsersContext())
+                    using (var context = new TrulySkilledDbContext())
                     {
                         if (!context.Database.Exists())
                         {

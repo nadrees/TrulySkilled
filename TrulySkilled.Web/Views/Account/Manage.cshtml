@@ -8,10 +8,9 @@
 
 <p class="message-success">@ViewBag.StatusMessage</p>
 
-<h3>
-    @User.Identity.Name
-</h3>
+<h3>@User.Identity.Name</h3>
 
+<hr />
 <section id="externalLogins">
     @Html.Action("RemoveExternalLogins")
     <hr />

@@ -9,6 +9,8 @@ namespace TrulySkilled.Web
         {
             bundles.UseCdn = true;
 
+            bundles.Add(new StyleBundle("~/Content/site").Include(
+                "~/Content/site.css"));
             bundles.Add(new StyleBundle("~/Content/bootstrap").Include(
                 "~/Content/bootstrap/bootstrap.css",
                 "~/Content/bootstrap/bootstrap-responsive.css"));
