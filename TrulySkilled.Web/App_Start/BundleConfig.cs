@@ -9,12 +9,12 @@ namespace TrulySkilled.Web
         {
             bundles.UseCdn = true;
 
-            bundles.Add(new StyleBundle("~/Content/site").Include(
+            bundles.Add(new StyleBundle("~/bundles/Content/site").Include(
                 "~/Content/site.css"));
-            bundles.Add(new StyleBundle("~/Content/bootstrap").Include(
+            bundles.Add(new StyleBundle("~/bundles/Content/bootstrap").Include(
                 "~/Content/bootstrap/bootstrap.css",
                 "~/Content/bootstrap/bootstrap-responsive.css"));
-            bundles.Add(new StyleBundle("~/Content/zocial").Include(
+            bundles.Add(new StyleBundle("~/bundles/Content/zocial").Include(
                 "~/Content/zocial/zocial.css",
                 "~/Content/zocial/zocial-regular-webfont.eot",
                 "~/Content/zocial/zocial-regular-webfont.svg",
