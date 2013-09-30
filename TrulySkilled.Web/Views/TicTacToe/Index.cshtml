@@ -1,0 +1,77 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/signalr")
+    @Scripts.Render("~/bundles/knockout")
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            function chatModel(name, message) {
+                var self = this;
+                self.name = name;
+                self.message = message;
+            }
+
+            function user(name) {
+                var self = this;
+
+                self.name = name;
+            }
+
+            function addMessage(message) {
+                if (vm.messages().length > 20) {
+                    vm.messages.shift();
+                }
+                vm.messages.push(message);
+            }
+
+            var vm = {
+                messages: ko.observableArray([]),
+                users: ko.observableArray([])
+            };
+            ko.applyBindings(vm);
+
+            var hub = $.connection.lobby;
+            hub.client.addMessage = function (name, message) {
+                addMessage(new chatModel(name, message));
+            };
+            hub.client.addUsers = function (names) {
+                $.each(names, function (index, name) {
+                    vm.users.push(new user(name));
+                });
+            };
+
+            $.connection.hub.start().done(function () {
+                $("#submit").removeAttr('disabled');
+            });
+
+            $("#submit").click(function () {
+                var message = $("#chat-input").val();
+                if (message && message.length > 0) {
+                    hub.server.submitMessage(message);
+                    $("#chat-input").val(null);
+                }
+            });
+        });
+    </script>
+}
+
+<div class="row-fluid">
+    <!-- ko foreach: users -->
+    <span class="span2" data-bind="text: name"></span>
+    <!-- /ko -->
+</div>
+<hr />
+<!-- ko foreach: messages -->
+<div class="row-fluid">
+    <span class="span2" data-bind="text: name"></span>
+    <span class="span10" data-bind="text: message"></span>
+</div>
+<!-- /ko -->
+
+<div class="row-fluid">
+    <input class="span11" type="text" id="chat-input" />
+    <input class="span1" type="button" value="Submit" id="submit" style="margin-bottom: 10px" disabled="disabled" />
+</div>

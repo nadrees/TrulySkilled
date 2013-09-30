@@ -10,7 +10,6 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using TrulySkilled.Web.Filters;
 using TrulySkilled.Web.Models;
-using TrulySkilled.Web.ViewModels.Account;
 
 namespace TrulySkilled.Web.Controllers
 {

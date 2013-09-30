@@ -1,3 +1,24 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+
+<div class="row-fluid">
+    <h2 class="span12 center">A collection of sites using Microsoft's TrueSkill&trade; algorithm.</h2>
+</div>
+<div class="row-fluid">
+    <h4 class="span12">Ranked Games (required sign in)</h4>
+</div>
+<div class="row-fluid">
+    <div class="span4">
+        @Html.ActionLink("Tic-Tac-Toe", "Index", "TicTacToe")
+    </div>
+</div>
+<div class="row-fluid">
+    <h4 class="span12">What is TrueSkill&trade;?</h4>
+</div>
+<div class="row-fluid">
+    <ul>
+        <li><a href="http://research.microsoft.com/en-us/projects/trueskill/">Microsoft Research on the TrueSkill&trade; Ranking System.</a></li>
+        <li><a href="http://www.moserware.com/2010/03/computing-your-skill.html">Blog post by Jeff Moser on TrueSkill&trade;.</a></li>
+    </ul>
+</div>

@@ -25,6 +25,10 @@ namespace TrulySkilled.Web
                 .Include("~/Scripts/jquery/jquery-{version}.js"));
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Scripts/bootstrap/bootstrap.js"));
+            bundles.Add(new ScriptBundle("~/bundles/signalr").Include(
+                "~/Scripts/signalr/jquery.signalR-{version}.js"));
+            bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
+                "~/Scripts/knockout/knockout-{version}.js"));
         }
     }
 }
