@@ -35,6 +35,7 @@ namespace TrulySkilled.Web.Hubs
 
         public override Task OnDisconnected()
         {
+            usersOnline.Remove(Context.User.Identity.Name);
             Clients.All.removeUser(Context.User.Identity.Name);
 
             return base.OnDisconnected();

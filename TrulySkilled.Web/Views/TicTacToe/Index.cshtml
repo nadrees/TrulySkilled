@@ -21,10 +21,18 @@
             }
 
             function addMessage(message) {
-                if (vm.messages().length > 20) {
+                if (vm.messages().length > 10) {
                     vm.messages.shift();
                 }
                 vm.messages.push(message);
+            }
+
+            function handleMessageSubmit() {
+                var message = $("#chat-input").val();
+                if (message && message.length > 0) {
+                    hub.server.submitMessage(message);
+                    $("#chat-input").val(null);
+                }
             }
 
             var vm = {
@@ -42,16 +50,20 @@
                     vm.users.push(new user(name));
                 });
             };
+            hub.client.removeUser = function (name) {
+                vm.users.remove(name);
+            };
 
             $.connection.hub.start().done(function () {
                 $("#submit").removeAttr('disabled');
+                $("#chat-input").removeAttr('disabled');
             });
 
-            $("#submit").click(function () {
-                var message = $("#chat-input").val();
-                if (message && message.length > 0) {
-                    hub.server.submitMessage(message);
-                    $("#chat-input").val(null);
+            $("#submit").click(handleMessageSubmit);
+            $("#chat-input").on("keypress", function (e) {
+                if (e.keyCode == 13) {
+                    handleMessageSubmit();
+                    return false;
                 }
             });
         });
@@ -59,19 +71,22 @@
 }
 
 <div class="row-fluid">
+    <h3 class="span12">Tic-Tac-Toe</h3>
+</div>
+<div class="row-fluid">
     <!-- ko foreach: users -->
-    <span class="span2" data-bind="text: name"></span>
+    <span class="span3" data-bind="text: name"></span>
     <!-- /ko -->
 </div>
 <hr />
 <!-- ko foreach: messages -->
 <div class="row-fluid">
-    <span class="span2" data-bind="text: name"></span>
-    <span class="span10" data-bind="text: message"></span>
+    <span class="span3" data-bind="text: name"></span>
+    <p class="span9" data-bind="text: message"></p>
 </div>
 <!-- /ko -->
 
 <div class="row-fluid">
-    <input class="span11" type="text" id="chat-input" />
-    <input class="span1" type="button" value="Submit" id="submit" style="margin-bottom: 10px" disabled="disabled" />
+    <input class="span11" type="text" id="chat-input" disabled="disabled" />
+    <input class="span1" type="submit" value="Submit" id="submit" style="margin-bottom: 10px" disabled="disabled" accesskey="return"/>
 </div>
