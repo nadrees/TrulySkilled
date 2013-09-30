@@ -51,7 +51,17 @@
                 });
             };
             hub.client.removeUser = function (name) {
-                vm.users.remove(name);
+                console.log('Removing user ' + name);
+
+                var userToRemove = null;
+                $.each(vm.users(), function (index, user) {
+                    if (user.name == name) {
+                        userToRemove = user;
+                    }
+                });
+                if (userToRemove) {
+                    vm.users.remove(userToRemove);
+                }
             };
 
             $.connection.hub.start().done(function () {
