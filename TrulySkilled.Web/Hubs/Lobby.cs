@@ -9,11 +9,21 @@ namespace TrulySkilled.Web.Hubs
 {
     public class Lobby : Hub
     {
-        public static readonly HashSet<String> usersOnline = new HashSet<string>();
+        public static readonly Dictionary<String, String> usersOnline = new Dictionary<String, string>();
 
         public void SubmitMessage(String message)
         {
             Clients.All.addMessage(Context.User.Identity.Name, message);
+        }
+
+        public void Challenge(String username)
+        {
+            if (usersOnline.ContainsKey(username))
+            {
+                var connectionId = usersOnline[username];
+                Clients.Client(connectionId).addChallenge(username);
+                Clients.Caller.challengeSent();
+            }
         }
 
         #region lifetime events
@@ -22,13 +32,13 @@ namespace TrulySkilled.Web.Hubs
             var username = Context.User.Identity.Name;
             var connectionId = Context.ConnectionId;
 
-            if (!usersOnline.Contains(username))
+            if (!usersOnline.ContainsKey(username))
             {
-                Clients.AllExcept(connectionId).addUsers(new[] { username });
-                usersOnline.Add(username);
+                Clients.Others.addUsers(new[] { username });
+                usersOnline.Add(username, connectionId);
             }
 
-            Clients.Caller.addUsers(usersOnline.ToArray());
+            Clients.Caller.addUsers(usersOnline.Keys.ToArray());
 
             return base.OnConnected();
         }
