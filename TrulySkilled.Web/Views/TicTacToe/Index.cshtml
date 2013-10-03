@@ -1,5 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Tic-Tac-Toe Lobby";
 }
 
 @section styles {
@@ -8,14 +9,14 @@
             margin-top: 0px;
             width: 10%;
         }
-        .user-select span {
+        .user-name {
             display: inline-block;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             width: 87%;
         }
-        input[type=submit] {
+        input[type=submit], .btn {
             margin-bottom: 10px;
         }
     </style>
@@ -29,6 +30,7 @@
         $(document).ready(function () {
             var username = "@User.Identity.Name";
 
+            // ------ View Model ---------
             function chatModel(name, message) {
                 var self = this;
                 self.name = name;
@@ -42,21 +44,55 @@
                 self.isSelf = (name == username);
             }
 
+            function challenge(name) {
+                var self = this;
+
+                self.name = name;
+                self.description = 'You have been challenged by ' + name;
+
+                self.acceptChallenge = function () {
+                    console.log('accept challenge clicked');
+
+                    hub.server.acceptChallenge(self.name);
+                };
+                self.rejectChallenge = function () {
+                    console.log('reject challenge clicked');
+
+                    var challenge = findChallengeWithName(self.name);
+                    vm.challengesReceived.remove(challenge);
+                    hub.server.rejectChallenge(self.name);
+                };
+            }
+
             function viewModel() {
                 var self = this;
 
                 self.messages = ko.observableArray([]);
                 self.users = ko.observableArray([]);
                 self.selected = ko.observable(null);
-                self.hasSelected = ko.computed(function () {
-                    if (self.selected() != null)
-                        return null;
-                    return 'disabled';
-                });
-                self.hasChallenged = ko.observable(false);
-                self.isBeingChallenged = ko.observable(false);
+
+                self.challenged = ko.observable(null);
                 self.serverReady = ko.observable(false);
+
+                // controlling disabling of challenge button
+                self.disableChallenge = ko.computed(function () {
+                    var hasChallenged = self.challenged() != null;
+                    var hasSelected = self.selected() == null;
+
+                    return hasChallenged || hasSelected;
+                }, self);
+
+                // messaging
+                self.message = ko.observable();
+                self.errorMessage = ko.observable();
+                self.errorTimeout = null;
+
+                // incoming challenges
+                self.challengesReceived = ko.observableArray([]);
             }
+
+            var vm = new viewModel();
+            ko.applyBindings(vm);
 
             function addMessage(message) {
                 if (vm.messages().length > 10) {
@@ -65,6 +101,23 @@
                 vm.messages.push(message);
             }
 
+            function findChallengeWithName(name) {
+                var challenges = vm.challengesReceived();
+                for (i = 0; i < challenges.length; i++) {
+                    if (challenges[i].name == name)
+                        return challenges[i];
+                }
+                return null;
+            }
+
+            function clearChallengeState() {
+                vm.challenged(null);
+                vm.selected(null);
+                vm.message(null);
+            }
+            // -------- End View Model -----------
+
+            // -------- Event Handlers -----------
             function handleMessageSubmit() {
                 var message = $("#chat-input").val();
                 if (message && message.length > 0) {
@@ -73,19 +126,48 @@
                 }
             }
 
-            var vm = new viewModel();
-            ko.applyBindings(vm);
+            $("#submit").click(handleMessageSubmit);
+            $("#chat-input").on("keypress", function (e) {
+                if (e.keyCode == 13) {
+                    handleMessageSubmit();
+                    return false;
+                }
+            });
+            $("#challenge").click(function () {
+                var challengedPlayerName = $("input[name=player]:radio:checked").val();
+                console.log('Challenging ' + challengedPlayerName);
+                hub.server.challenge(challengedPlayerName);
+            });
+            $("#info-close").click(function () {
+                vm.message(null);
+            });
+            $("#error-close").click(function () {
+                clearTimeout(vm.errorTimeout);
+                vm.errorTimeout = null;
+                vm.errorMessage(null);
+            });
+            $("#cancel-challenge").click(function () {
+                hub.server.cancelChallenge();
+                clearChallengeState();
+            });
+            // -------- End Event Handlers ---------
 
-            var hub = $.connection.lobby;
+            // -------- IO ---------
+            var hub = $.connection.gameLobby;
             hub.client.addMessage = function (name, message) {
+                // called when a chat message is added
+                console.log('Adding message ' + message + ' from ' + name);
                 addMessage(new chatModel(name, message));
             };
             hub.client.addUsers = function (names) {
+                // called when a new user enters the chat room
+                console.log('Adding users ' + names);
                 $.each(names, function (index, name) {
                     vm.users.push(new user(name));
                 });
             };
             hub.client.removeUser = function (name) {
+                // called wehn a user leaves the chat room
                 console.log('Removing user ' + name);
 
                 var userToRemove = null;
@@ -99,24 +181,52 @@
                 }
             };
             hub.client.addChallenge = function (name) {
+                // call when this user recieves a challenge from another user
+                console.log('add challenge called (' + name + ')');
 
+                if (findChallengeWithName(name) == null) {
+                    var challengeModel = new challenge(name);
+                    vm.challengesReceived.push(challengeModel);
+                }
             };
-            hub.client.challengeSent = function () {
-                vm.hasChallenged(true);
-                vm.selected(null);
+            hub.client.challengeSent = function (name) {
+                // callback for when this user challenges another user
+                console.log('challenge sent called');
+                vm.challenged(name);
+                vm.message('Challenge sent to ' + name + ', awaiting response...');
             };
+            hub.client.cancelChallenge = function (name) {
+                // called when another user's challenge was canceled by the other user
+                console.log('cancel challenge called (' + name + ')');
+
+                var challenge = findChallengeWithName(name);
+                if (challenge != null)
+                    vm.challengesReceived.remove(challenge);
+            };
+            hub.client.rejectChallenge = function () {
+                // called when an outstanding challenge is rejected
+                console.log('reject challenge called');
+
+                var challengedUser = vm.challenged();
+
+                clearChallengeState();
+                vm.errorMessage(challengedUser + ' has rejected your challenge');
+                vm.errorTimeout = setTimeout(function () {
+                    vm.errorMessage(null);
+                    vm.errorTimeout = null;
+                }, 5000);
+            };
+            hub.client.acceptChallenge = function (randomGuid) {
+                // called when a challenge is accepted
+                console.log('accept challenge called');
+
+                window.location.href = '@Url.Action("Game")' + '/' + randomGuid;
+            };
+            // ---------- End IO -----------
 
             $.connection.hub.start().done(function () {
                 $("#submit").removeAttr('disabled');
                 $("#chat-input").removeAttr('disabled');
-            });
-
-            $("#submit").click(handleMessageSubmit);
-            $("#chat-input").on("keypress", function (e) {
-                if (e.keyCode == 13) {
-                    handleMessageSubmit();
-                    return false;
-                }
             });
         });
     </script>
@@ -125,12 +235,36 @@
 <div class="row-fluid">
     <h3 class="span12">Tic-Tac-Toe</h3>
 </div>
+<!-- ko foreach: challengesReceived -->
 <div class="row-fluid">
-    <input type="submit" class="span2" value="Challenge" id="challenge" data-bind="attr: { disabled: serverReady() && hasSelected() && !hasChallenged() && !isBeingChallenged() }" />
+    <button type="button" class="btn btn-success span2 accept-btn" data-bind="click: acceptChallenge">Accept</button>
+    <button type="button" class="btn btn-danger span2 reject-btn" data-bind="click: rejectChallenge">Reject</button>
+    <span class="alert alert-info span8" data-bind="text: description" style="margin-top: -5px"></span>
+</div>
+<!-- /ko -->
+<div class="row-fluid" data-bind="visible: errorMessage() != null && errorMessage().length > 0" >
+    <div class="alert alert-error span12" id="error-alert">
+        <span data-bind="text: errorMessage"></span>
+        <button type="button" class="close" id="error-close">&times;</button>
+    </div>
+</div>
+<div class="row-fluid" data-bind="visible: message() != null && message().length > 0">
+    <div class="alert alert-info span12">
+        <span data-bind="text: message"></span>
+        <button type="button" class="close" id="info-close">&times;</button>
+    </div>
+</div>
+<div class="row-fluid">
+    <span class="span2">
+        <button type="submit" class="btn btn-primary" id="challenge" 
+            data-bind="disable: selected() == null, visible: challenged() == null">Challenge</button>
+        <button type="button" class="btn btn-danger" id="cancel-challenge" 
+            data-bind="visible: challenged() != null">Cancel</button>
+    </span>
 </div>
 <div class="row-fluid">
     <!-- ko foreach: users -->
-    <div class="span3 user-select">
+    <div class="span4 user-select">
         <!-- ko ifnot: isSelf -->
         <input type="radio" name="player" data-bind="attr: { value: name }, checked: $parent.selected" />
         <!-- /ko -->
@@ -141,7 +275,7 @@
 <hr />
 <!-- ko foreach: messages -->
 <div class="row-fluid">
-    <span class="span3" data-bind="text: name"></span>
+    <span class="span3 user-name" data-bind="text: name"></span>
     <p class="span9" data-bind="text: message"></p>
 </div>
 <!-- /ko -->

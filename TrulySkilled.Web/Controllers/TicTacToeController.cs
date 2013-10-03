@@ -14,5 +14,10 @@ namespace TrulySkilled.Web.Controllers
             return View();
         }
 
+        [Authorize]
+        public ActionResult Game(Guid id)
+        {
+            return View(id);
+        }
     }
 }

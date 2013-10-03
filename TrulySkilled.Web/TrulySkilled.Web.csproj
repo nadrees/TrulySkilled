@@ -206,6 +206,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hubs\GameLobby.cs" />
     <Compile Include="Hubs\Lobby.cs" />
     <Compile Include="Hubs\TicTacToe.cs" />
     <Compile Include="Migrations\201307232337408_InitialMigration.cs" />
@@ -317,6 +318,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\TicTacToe\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\TicTacToe\Game.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

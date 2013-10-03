@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Microsoft.AspNet.SignalR;
 using System.Threading.Tasks;
+using Microsoft.AspNet.SignalR.Hubs;
 
 namespace TrulySkilled.Web.Hubs
 {
@@ -11,25 +12,19 @@ namespace TrulySkilled.Web.Hubs
     {
         public static readonly Dictionary<String, String> usersOnline = new Dictionary<String, string>();
 
+        /// <summary>
+        /// Submits a chat message to all users in the chat room
+        /// </summary>
+        /// <param name="message">The message to submit</param>
         public void SubmitMessage(String message)
         {
-            Clients.All.addMessage(Context.User.Identity.Name, message);
-        }
-
-        public void Challenge(String username)
-        {
-            if (usersOnline.ContainsKey(username))
-            {
-                var connectionId = usersOnline[username];
-                Clients.Client(connectionId).addChallenge(username);
-                Clients.Caller.challengeSent();
-            }
+            Clients.All.addMessage(Context.GetCurrentUserName(), message);
         }
 
         #region lifetime events
         public override Task OnConnected()
         {
-            var username = Context.User.Identity.Name;
+            var username = Context.GetCurrentUserName();
             var connectionId = Context.ConnectionId;
 
             if (!usersOnline.ContainsKey(username))
@@ -45,11 +40,19 @@ namespace TrulySkilled.Web.Hubs
 
         public override Task OnDisconnected()
         {
-            usersOnline.Remove(Context.User.Identity.Name);
-            Clients.All.removeUser(Context.User.Identity.Name);
+            usersOnline.Remove(Context.GetCurrentUserName());
+            Clients.All.removeUser(Context.GetCurrentUserName());
 
             return base.OnDisconnected();
         }
         #endregion
+    }
+
+    public static class Extensions
+    {
+        public static String GetCurrentUserName(this HubCallerContext context)
+        {
+            return context.User.Identity.Name;
+        }
     }
 }
