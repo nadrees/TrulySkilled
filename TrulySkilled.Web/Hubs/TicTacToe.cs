@@ -6,7 +6,7 @@ using System.Web;
 
 namespace TrulySkilled.Web.Hubs
 {
-    public class TicTacToe : Hub
+    public class TicTacToe : Chat
     {
     }
 }

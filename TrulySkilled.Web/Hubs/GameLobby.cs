@@ -6,7 +6,7 @@ using System.Web;
 
 namespace TrulySkilled.Web.Hubs
 {
-    public class GameLobby : Lobby
+    public class GameLobby : Chat
     {
         public static Dictionary<String, String> challenges = new Dictionary<string, string>();
 

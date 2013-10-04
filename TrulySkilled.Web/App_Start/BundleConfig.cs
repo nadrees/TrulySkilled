@@ -29,6 +29,8 @@ namespace TrulySkilled.Web
                 "~/Scripts/signalr/jquery.signalR-{version}.js"));
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
                 "~/Scripts/knockout/knockout-{version}.js"));
+            bundles.Add(new ScriptBundle("~/bundles/chat").Include(
+                "~/Scripts/chat/trulyskilled.chat.js"));
         }
     }
 }

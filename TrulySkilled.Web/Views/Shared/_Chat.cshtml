@@ -1,0 +1,14 @@
+﻿<link href="~/Content/chat.css" type="text/css" rel="stylesheet" />
+@Scripts.Render("~/bundles/chat")
+
+<hr />
+<!-- ko foreach: messages -->
+<div class="row-fluid">
+    <span class="span3 user-name" data-bind="text: name"></span>
+    <p class="span9" data-bind="text: message"></p>
+</div>
+<!-- /ko -->
+<div class="row-fluid">
+    <input class="span10" type="text" id="chat-input" disabled="disabled" />
+    <input class="span2 pull-right" type="submit" value="Submit" id="submit" style="margin-bottom: 10px" disabled="disabled" />
+</div>

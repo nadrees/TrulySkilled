@@ -16,7 +16,7 @@
             white-space: nowrap;
             width: 87%;
         }
-        input[type=submit], .btn {
+        .btn {
             margin-bottom: 10px;
         }
     </style>
@@ -31,19 +31,6 @@
             var username = "@User.Identity.Name";
 
             // ------ View Model ---------
-            function chatModel(name, message) {
-                var self = this;
-                self.name = name;
-                self.message = message;
-            }
-
-            function user(name) {
-                var self = this;
-
-                self.name = name;
-                self.isSelf = (name == username);
-            }
-
             function challenge(name) {
                 var self = this;
 
@@ -64,10 +51,16 @@
                 };
             }
 
+            function user(name) {
+                var self = this;
+
+                self.name = name;
+                self.isSelf = (name == username);
+            }
+
             function viewModel() {
                 var self = this;
 
-                self.messages = ko.observableArray([]);
                 self.users = ko.observableArray([]);
                 self.selected = ko.observable(null);
 
@@ -91,16 +84,6 @@
                 self.challengesReceived = ko.observableArray([]);
             }
 
-            var vm = new viewModel();
-            ko.applyBindings(vm);
-
-            function addMessage(message) {
-                if (vm.messages().length > 10) {
-                    vm.messages.shift();
-                }
-                vm.messages.push(message);
-            }
-
             function findChallengeWithName(name) {
                 var challenges = vm.challengesReceived();
                 for (i = 0; i < challenges.length; i++) {
@@ -118,21 +101,6 @@
             // -------- End View Model -----------
 
             // -------- Event Handlers -----------
-            function handleMessageSubmit() {
-                var message = $("#chat-input").val();
-                if (message && message.length > 0) {
-                    hub.server.submitMessage(message);
-                    $("#chat-input").val(null);
-                }
-            }
-
-            $("#submit").click(handleMessageSubmit);
-            $("#chat-input").on("keypress", function (e) {
-                if (e.keyCode == 13) {
-                    handleMessageSubmit();
-                    return false;
-                }
-            });
             $("#challenge").click(function () {
                 var challengedPlayerName = $("input[name=player]:radio:checked").val();
                 console.log('Challenging ' + challengedPlayerName);
@@ -154,11 +122,6 @@
 
             // -------- IO ---------
             var hub = $.connection.gameLobby;
-            hub.client.addMessage = function (name, message) {
-                // called when a chat message is added
-                console.log('Adding message ' + message + ' from ' + name);
-                addMessage(new chatModel(name, message));
-            };
             hub.client.addUsers = function (names) {
                 // called when a new user enters the chat room
                 console.log('Adding users ' + names);
@@ -224,6 +187,10 @@
             };
             // ---------- End IO -----------
 
+            var vm = new viewModel();
+            window.chat.start(vm, hub);
+            ko.applyBindings(vm);
+
             $.connection.hub.start().done(function () {
                 $("#submit").removeAttr('disabled');
                 $("#chat-input").removeAttr('disabled');
@@ -272,15 +239,5 @@
     </div>
     <!-- /ko -->
 </div>
-<hr />
-<!-- ko foreach: messages -->
-<div class="row-fluid">
-    <span class="span3 user-name" data-bind="text: name"></span>
-    <p class="span9" data-bind="text: message"></p>
-</div>
-<!-- /ko -->
 
-<div class="row-fluid">
-    <input class="span10" type="text" id="chat-input" disabled="disabled" />
-    <input class="span2 pull-right" type="submit" value="Submit" id="submit" style="margin-bottom: 10px" disabled="disabled" />
-</div>
+@Html.Partial("_Chat")

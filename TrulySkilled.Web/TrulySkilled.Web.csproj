@@ -207,7 +207,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\GameLobby.cs" />
-    <Compile Include="Hubs\Lobby.cs" />
+    <Compile Include="Hubs\Chat.cs" />
     <Compile Include="Hubs\TicTacToe.cs" />
     <Compile Include="Migrations\201307232337408_InitialMigration.cs" />
     <Compile Include="Migrations\201307232337408_InitialMigration.Designer.cs">
@@ -231,6 +231,7 @@
     <Content Include="Content\bootstrap\bootstrap.min.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\chat.css" />
     <Content Include="Content\site.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -254,6 +255,7 @@
     <Content Include="Scripts\bootstrap\bootstrap.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\chat\trulyskilled.chat.js" />
     <Content Include="Scripts\knockout\knockout-2.3.0.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -321,6 +323,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\TicTacToe\Game.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_Chat.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

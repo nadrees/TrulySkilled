@@ -1,0 +1,10 @@
+﻿.user-name {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 87%;
+}
+input[type=submit] {
+    margin-bottom: 10px;
+}
