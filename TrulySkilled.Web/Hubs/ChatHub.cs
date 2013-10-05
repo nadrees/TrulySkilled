@@ -8,7 +8,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 
 namespace TrulySkilled.Web.Hubs
 {
-    public class Chat : Hub
+    public class ChatHub : Hub
     {
         public static readonly Dictionary<String, String> usersOnline = new Dictionary<String, string>();
 
