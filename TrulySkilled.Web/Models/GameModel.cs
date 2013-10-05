@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace TrulySkilled.Web.Models
 {
@@ -19,5 +17,12 @@ namespace TrulySkilled.Web.Models
         public virtual IEnumerable<PlayerModel> Players { get; set; }
         public virtual IEnumerable<MatchModel> Matches { get; set; }
         public virtual IEnumerable<TeamModel> Teams { get; set; }
+    }
+
+    public class GameNames
+    {
+        public const String TicTacToe = "Tic-Tac-Toe";
+
+        public static IEnumerable<String> GameNamesSet = new[] { TicTacToe };
     }
 }

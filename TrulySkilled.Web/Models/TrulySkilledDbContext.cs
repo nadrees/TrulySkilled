@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web;
+﻿using System.Data.Entity;
+using TrulySkilled.Web.Migrations;
 
 namespace TrulySkilled.Web.Models
 {
@@ -17,5 +14,11 @@ namespace TrulySkilled.Web.Models
         public DbSet<MatchModel> Matches { get; set; }
         public DbSet<PlayerModel> Players { get; set; }
         public DbSet<TeamModel> Teams { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            Database.SetInitializer<TrulySkilledDbContext>(
+                    new MigrateDatabaseToLatestVersion<TrulySkilledDbContext, Configuration>());
+        }
     }
 }

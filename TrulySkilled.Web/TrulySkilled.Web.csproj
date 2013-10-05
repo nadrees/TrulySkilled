@@ -206,15 +206,23 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Hubs\GameLobby.cs" />
-    <Compile Include="Hubs\Chat.cs" />
-    <Compile Include="Hubs\TicTacToe.cs" />
+    <Compile Include="Hubs\GameLobbyHub.cs" />
+    <Compile Include="Hubs\ChatHub.cs" />
+    <Compile Include="Hubs\TicTacToeHub.cs" />
     <Compile Include="Migrations\201307232337408_InitialMigration.cs" />
     <Compile Include="Migrations\201307232337408_InitialMigration.Designer.cs">
       <DependentUpon>201307232337408_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201310051930028_GameModels.cs" />
+    <Compile Include="Migrations\201310051930028_GameModels.Designer.cs">
+      <DependentUpon>201310051930028_GameModels.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\GameModel.cs" />
+    <Compile Include="Models\MatchModel.cs" />
+    <Compile Include="Models\PlayerModel.cs" />
+    <Compile Include="Models\TeamModel.cs" />
     <Compile Include="Models\TrulySkilledDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -317,6 +325,9 @@
     <EmbeddedResource Include="Migrations\201307232337408_InitialMigration.resx">
       <DependentUpon>201307232337408_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201310051930028_GameModels.resx">
+      <DependentUpon>201310051930028_GameModels.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\TicTacToe\Index.cshtml" />
@@ -326,6 +337,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_Chat.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TrulySkilled.Game\TrulySkilled.Game.csproj">
+      <Project>{b453cbcd-8b99-4003-b877-5c7f73fb7700}</Project>
+      <Name>TrulySkilled.Game</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

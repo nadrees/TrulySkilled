@@ -35,13 +35,13 @@ namespace TrulySkilled.Web.Migrations
                 "dbo.PlayerModels",
                 c => new
                     {
-                        Key = c.Int(nullable: false, identity: true),
+                        Id = c.Int(nullable: false, identity: true),
                         Mean = c.Double(nullable: false),
                         StandardDeviation = c.Double(nullable: false),
                         Game_Id = c.Int(),
                         User_UserId = c.Int(),
                     })
-                .PrimaryKey(t => t.Key)
+                .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.GameModels", t => t.Game_Id)
                 .ForeignKey("dbo.UserProfile", t => t.User_UserId)
                 .Index(t => t.Game_Id)

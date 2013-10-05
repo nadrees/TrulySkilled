@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace TrulySkilled.Web.Models
 {
@@ -15,7 +12,7 @@ namespace TrulySkilled.Web.Models
         }
 
         [Key]
-        public int Key { get; set; }
+        public int Id { get; set; }
 
         public double Mean { get; set; }
         public double StandardDeviation { get; set; }
