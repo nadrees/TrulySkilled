@@ -6,6 +6,17 @@ namespace TrulySkilled.Web.Models
 {
     public class GameModel
     {
+        public static GameModel NewGame(String name)
+        {
+            return new GameModel
+            {
+                Name = name,
+                Beta = 25.0 / 6.0,
+                DrawProbability = .10,
+                DynamicsFactor = 25.0 / 300.0
+            };
+        }
+
         [Key]
         public int Id { get; set; }
 

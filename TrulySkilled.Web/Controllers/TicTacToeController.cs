@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using System.Web.Mvc;
 using TrulySkilled.Game.TicTacToe;
 using TrulySkilled.Web.Hubs;
@@ -10,21 +9,6 @@ namespace TrulySkilled.Web.Controllers
 {
     public class TicTacToeController : Controller
     {
-        public static Lazy<GameModel> GameRecord = new Lazy<GameModel>(() =>
-        {
-            GameModel game = null;
-
-            using (var db = new TrulySkilledDbContext())
-            {
-                game = (from g in db.Games
-                        where g.Name == GameNames.TicTacToe
-                        select g)
-                       .First();
-            }
-
-            return game;
-        }, LazyThreadSafetyMode.ExecutionAndPublication);
-
         [Authorize]
         public ActionResult Index()
         {
@@ -47,7 +31,10 @@ namespace TrulySkilled.Web.Controllers
                 {
                     player = new PlayerModel
                     {
-                        Game = GameRecord.Value,
+                        Game = (from g in db.Games
+                                where g.Name == GameNames.TicTacToe
+                                select g)
+                                .First(),
                         User = (from u in db.UserProfiles
                                 where u.UserName == User.Identity.Name
                                 select u)

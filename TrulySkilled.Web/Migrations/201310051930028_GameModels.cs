@@ -2,6 +2,7 @@ namespace TrulySkilled.Web.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
+    using TrulySkilled.Web.Models;
     
     public partial class GameModels : DbMigration
     {
@@ -58,7 +59,6 @@ namespace TrulySkilled.Web.Migrations
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.GameModels", t => t.Game_Id)
                 .Index(t => t.Game_Id);
-            
         }
         
         public override void Down()

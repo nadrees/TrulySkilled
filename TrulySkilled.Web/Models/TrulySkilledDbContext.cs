@@ -14,11 +14,5 @@ namespace TrulySkilled.Web.Models
         public DbSet<MatchModel> Matches { get; set; }
         public DbSet<PlayerModel> Players { get; set; }
         public DbSet<TeamModel> Teams { get; set; }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            Database.SetInitializer<TrulySkilledDbContext>(
-                    new MigrateDatabaseToLatestVersion<TrulySkilledDbContext, Configuration>());
-        }
     }
 }

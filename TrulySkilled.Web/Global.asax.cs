@@ -1,7 +1,10 @@
-﻿using System.Web.Http;
+﻿using System.Data.Entity;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using TrulySkilled.Web.Migrations;
+using TrulySkilled.Web.Models;
 
 namespace TrulySkilled.Web
 {
@@ -21,6 +24,9 @@ namespace TrulySkilled.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+
+            Database.SetInitializer<TrulySkilledDbContext>(
+                    new MigrateDatabaseToLatestVersion<TrulySkilledDbContext, Configuration>());
         }
     }
 }
