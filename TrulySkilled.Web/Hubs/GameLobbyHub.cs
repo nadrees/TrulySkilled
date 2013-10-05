@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,7 +7,7 @@ namespace TrulySkilled.Web.Hubs
 {
     public class GameLobbyHub : ChatHub
     {
-        public static Dictionary<String, String> challenges = new Dictionary<string, string>();
+        public static ConcurrentDictionary<String, String> challenges = new ConcurrentDictionary<string, string>();
 
         /// <summary>
         /// Issues a challenge to the target user
@@ -21,10 +22,15 @@ namespace TrulySkilled.Web.Hubs
             {
                 String currentUserName = Context.GetCurrentUserName();
 
-                if (!challenges.ContainsKey(currentUserName))
+                bool hasChallenge = false;
+                challenges.AddOrUpdate(currentUserName, username, (_, existingUserName) =>
                 {
-                    challenges.Add(currentUserName, username);
+                    hasChallenge = true;
+                    return existingUserName;
+                });
 
+                if (!hasChallenge)
+                {
                     Clients.Client(connectionId).addChallenge(currentUserName);
                     Clients.Caller.challengeSent(username);
                 }
@@ -39,15 +45,13 @@ namespace TrulySkilled.Web.Hubs
         {
             String currentUserName = Context.GetCurrentUserName();
 
-            if (challenges.ContainsKey(currentUserName))
+            String challengedUser;
+            if (challenges.TryRemove(currentUserName, out challengedUser) && challengedUser != null)
             {
-                String otherUserName = challenges[currentUserName];
-                challenges.Remove(currentUserName);
-
-                if (usersOnline.ContainsKey(otherUserName))
+                String connectionId;
+                if (usersOnline.TryGetValue(challengedUser, out connectionId))
                 {
-                    var connectionId = usersOnline[otherUserName];
-                    Clients.Client(connectionId).cancelChallenge(currentUserName);
+                    Clients.Client(connectionId).cancelChallenge(challengedUser);
                 }
             }
         }
@@ -58,13 +62,12 @@ namespace TrulySkilled.Web.Hubs
         /// <param name="username">The username of the user who originally issued the challenge</param>
         public void RejectChallenge(String username)
         {
-            if (challenges.ContainsKey(username))
+            String _;
+            if (challenges.TryRemove(username, out _))
             {
-                challenges.Remove(username);
-
-                if (usersOnline.ContainsKey(username))
+                String connectionId;
+                if (usersOnline.TryGetValue(username, out connectionId))
                 {
-                    var connectionId = usersOnline[username];
                     Clients.Client(connectionId).rejectChallenge();
                 }
             }
@@ -76,14 +79,13 @@ namespace TrulySkilled.Web.Hubs
         /// <param name="username">The username of the user who originally issued the challenge</param>
         public void AcceptChallenge(String username)
         {
-            if (challenges.ContainsKey(username))
+            String _;
+            if (challenges.TryRemove(username, out _))
             {
-                challenges.Remove(username);
-
                 String randomGuid = Guid.NewGuid().ToString();
-                if (usersOnline.ContainsKey(username))
+                String connectionId;
+                if (usersOnline.TryGetValue(username, out connectionId))
                 {
-                    var connectionId = usersOnline[username];
                     Clients.Client(connectionId).acceptChallenge(randomGuid);
                     Clients.Caller.acceptChallenge(randomGuid);
                 }
