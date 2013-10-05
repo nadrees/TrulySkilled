@@ -5,6 +5,7 @@ using System.Threading;
 using System.Web.Mvc;
 using WebMatrix.WebData;
 using TrulySkilled.Web.Models;
+using TrulySkilled.Web.Migrations;
 
 namespace TrulySkilled.Web.Filters
 {
@@ -25,7 +26,8 @@ namespace TrulySkilled.Web.Filters
         {
             public SimpleMembershipInitializer()
             {
-                Database.SetInitializer<TrulySkilledDbContext>(null);
+                Database.SetInitializer<TrulySkilledDbContext>(
+                    new MigrateDatabaseToLatestVersion<TrulySkilledDbContext, Configuration>());
 
                 try
                 {
