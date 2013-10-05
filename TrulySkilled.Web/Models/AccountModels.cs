@@ -15,6 +15,8 @@ namespace TrulySkilled.Web.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int UserId { get; set; }
         public string UserName { get; set; }
+
+        public virtual IEnumerable<PlayerModel> PlayerRecords { get; set; }
     }
 
     public class RegisterExternalLoginModel

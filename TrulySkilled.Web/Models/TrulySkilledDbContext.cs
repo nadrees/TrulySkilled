@@ -13,5 +13,9 @@ namespace TrulySkilled.Web.Models
         }
 
         public DbSet<UserProfile> UserProfiles { get; set; }
+        public DbSet<GameModel> Games { get; set; }
+        public DbSet<MatchModel> Matches { get; set; }
+        public DbSet<PlayerModel> Players { get; set; }
+        public DbSet<TeamModel> Teams { get; set; }
     }
 }
