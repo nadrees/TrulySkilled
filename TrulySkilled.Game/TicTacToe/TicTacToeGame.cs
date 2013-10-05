@@ -16,4 +16,10 @@ namespace TrulySkilled.Game.TicTacToe
             playerIds.Add(playerId);
         }
     }
+
+    public class Player
+    {
+        public int PlayerId { get; set; }
+        public string PlayerName { get; set; }
+    }
 }

@@ -31,7 +31,7 @@ window.chat = window.chat || (function () {
     // --------- End Event Handlers ---------
 
     return {
-        start: function (viewModel, hubRef) {
+        init: function (viewModel, hubRef) {
             viewModel.messages = ko.observableArray([]);
             hubRef.client.addMessage = function (name, message) {
                 // called when a chat message is added
@@ -49,6 +49,10 @@ window.chat = window.chat || (function () {
                     return false;
                 }
             });
+        },
+        start: function () {
+            $("#submit").removeAttr('disabled');
+            $("#chat-input").removeAttr('disabled');
         }
     }
 }());

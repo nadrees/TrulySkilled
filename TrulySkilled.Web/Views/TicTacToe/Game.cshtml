@@ -1,4 +1,4 @@
-﻿@model Guid
+﻿@model TrulySkilled.Web.ViewModels.Game.PlayGameViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,13 +7,30 @@
 @section scripts {
     @Scripts.Render("~/bundles/signalr")
     @Scripts.Render("~/bundles/knockout")
+    <script type="text/javascript" src="~/signalr/hubs"></script>
     <script type="text/javascript">
+        var gameId = "@Model.GameId";
+        var playerId = "@Model.PlayerId";
 
+        function viewModel() {
+            var self = this;
+        }
+
+        var hub = $.connection.ticTacToeHub;
+
+        var vm = new viewModel();
+        window.chat.init(vm, hub);
+        ko.applyBindings(vm);
+
+        $.connection.hub.start().done(function () {
+            window.chat.start();
+            hub.server.userArrived({ gameId: gameId, playerId: playerId });
+        });
     </script>
 }
 
 <p>Coming soon.</p>
 
-<p>Your game id is @Model</p>
+<p>Your game id is @Model.GameId</p>
 
 @Html.Partial("_Chat")

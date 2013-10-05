@@ -188,12 +188,11 @@
             // ---------- End IO -----------
 
             var vm = new viewModel();
-            window.chat.start(vm, hub);
+            window.chat.init(vm, hub);
             ko.applyBindings(vm);
 
             $.connection.hub.start().done(function () {
-                $("#submit").removeAttr('disabled');
-                $("#chat-input").removeAttr('disabled');
+                window.chat.start();
             });
         });
     </script>

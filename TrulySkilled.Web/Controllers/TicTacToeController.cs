@@ -2,8 +2,9 @@
 using System.Linq;
 using System.Web.Mvc;
 using TrulySkilled.Game.TicTacToe;
-using TrulySkilled.Web.Hubs;
+using TrulySkilled.Web.Hubs.TicTacToe;
 using TrulySkilled.Web.Models;
+using TrulySkilled.Web.ViewModels.Game;
 
 namespace TrulySkilled.Web.Controllers
 {
@@ -51,7 +52,7 @@ namespace TrulySkilled.Web.Controllers
                 new TicTacToeGame(playerId.Value),
                 (_, game) => { game.AddPlayer(playerId.Value); return game; });
 
-            return View(id);
+            return View(new PlayGameViewModel { GameId = id, PlayerId = playerId.Value });
         }
     }
 }
