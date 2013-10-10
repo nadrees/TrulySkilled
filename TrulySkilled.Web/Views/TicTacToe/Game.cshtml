@@ -1,4 +1,4 @@
-﻿@model TrulySkilled.Web.ViewModels.Game.PlayGameViewModel
+﻿@model Guid
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,14 +9,43 @@
     @Scripts.Render("~/bundles/knockout")
     <script type="text/javascript" src="~/signalr/hubs"></script>
     <script type="text/javascript">
-        var gameId = "@Model.GameId";
-        var playerId = "@Model.PlayerId";
+        var gameId = "@Model";
 
         function viewModel() {
             var self = this;
         }
 
-        var hub = $.connection.ticTacToeHub;
+        var hub = $.connection.ticTacToeGameHub;
+        hub.client.setAwaitingPlayers = function (players) {
+            // called when this player has finished loading the page, but waiting
+            // on other players to finish
+            console.log('set awaiting players called (' + players + ')');
+        };
+        hub.client.startGame = function () {
+            // called when all players have finished loading the page
+            console.log('start game called');
+        };
+        hub.client.playerLeft = function (playerName) {
+            // called when a player leaves the game page
+            console.log('player left called (' + playerName + ')');
+        };
+        hub.client.startPlayerLeftTimer = function () {
+            // called when all other players have left the game
+            // but before the game has finished
+            console.log('start player left timer called');
+        };
+        hub.client.playerRejoined = function (playerName) {
+            // called when a player has rejoined the game
+            console.log('player rejoined called (' + playerName + ')');
+        };
+        hub.client.kickPlayer = function (playerName) {
+            // called when another player has been kicked from the game
+            console.log('kick player called (' + playerName + ')');
+        };
+        hub.client.setFinalRank = function (message) {
+            // called to display the results of the game
+            console.log('set final rank called (' + message + ')');
+        };
 
         var vm = new viewModel();
         window.chat.init(vm, hub);
@@ -24,13 +53,13 @@
 
         $.connection.hub.start().done(function () {
             window.chat.start();
-            hub.server.userArrived({ gameId: gameId, playerId: playerId });
+            hub.server.userArrived(gameId);
         });
     </script>
 }
 
-<p>Coming soon.</p>
-
-<p>Your game id is @Model.GameId</p>
+<div class="row-fluid">
+    @Html.ActionLink("Return to lobby", "Index")
+</div>
 
 @Html.Partial("_Chat")

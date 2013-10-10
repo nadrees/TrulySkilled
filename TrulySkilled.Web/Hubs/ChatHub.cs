@@ -10,7 +10,10 @@ namespace TrulySkilled.Web.Hubs
 {
     public class ChatHub : Hub
     {
-        public static readonly ConcurrentDictionary<String, String> usersOnline = new ConcurrentDictionary<String, string>();
+        protected static readonly ConcurrentDictionary<String, String> connectionIdToUsernameMap =
+            new ConcurrentDictionary<string, string>();
+        protected static readonly ConcurrentDictionary<String, String> usernameToGroupMap =
+            new ConcurrentDictionary<string, string>();
 
         /// <summary>
         /// Submits a chat message to all users in the chat room
@@ -18,7 +21,18 @@ namespace TrulySkilled.Web.Hubs
         /// <param name="message">The message to submit</param>
         public void SubmitMessage(String message)
         {
-            Clients.All.addMessage(Context.GetCurrentUserName(), message);
+            String group;
+            if (usernameToGroupMap.TryGetValue(Context.GetCurrentUserName(), out group))
+            {
+                Clients.Group(group).addMessage(Context.GetCurrentUserName(), message);
+            }
+        }
+
+        public async Task JoinChatGroup(String groupName)
+        {
+            usernameToGroupMap.AddOrUpdate(Context.GetCurrentUserName(), groupName, (_1, _2) => groupName);
+
+            await Groups.Add(Context.ConnectionId, groupName);
         }
 
         #region lifetime events
@@ -27,17 +41,7 @@ namespace TrulySkilled.Web.Hubs
             var username = Context.GetCurrentUserName();
             var connectionId = Context.ConnectionId;
 
-            bool userIsOnline = false;
-            usersOnline.AddOrUpdate(username, connectionId, (_1, _2) =>
-            {
-                userIsOnline = true;
-                return connectionId;
-            });
-
-            if (!userIsOnline)
-                Clients.Others.addUsers(new[] { username });
-
-            Clients.Caller.addUsers(usersOnline.Keys.ToArray());
+            connectionIdToUsernameMap.AddOrUpdate(connectionId, username, (_1, _2) => username);
 
             return base.OnConnected();
         }
@@ -45,8 +49,11 @@ namespace TrulySkilled.Web.Hubs
         public override Task OnDisconnected()
         {
             String username;
-            usersOnline.TryRemove(Context.GetCurrentUserName(), out username);
-            Clients.All.removeUser(Context.GetCurrentUserName());
+            if (connectionIdToUsernameMap.TryRemove(Context.ConnectionId, out username))
+            {
+                String group;
+                usernameToGroupMap.TryRemove(username, out group);
+            }
 
             return base.OnDisconnected();
         }

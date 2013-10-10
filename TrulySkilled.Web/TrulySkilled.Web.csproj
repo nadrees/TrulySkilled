@@ -201,14 +201,16 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IGameController.cs" />
     <Compile Include="Controllers\TicTacToeController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Hubs\GameLobbyHub.cs" />
+    <Compile Include="Hubs\LobbyHub.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
-    <Compile Include="Hubs\TicTacToeHub.cs" />
+    <Compile Include="Hubs\TicTacToe\TicTacToeLobbyHub.cs" />
+    <Compile Include="Hubs\TicTacToe\TicTacToeHub.cs" />
     <Compile Include="Migrations\201307232337408_InitialMigration.cs" />
     <Compile Include="Migrations\201307232337408_InitialMigration.Designer.cs">
       <DependentUpon>201307232337408_InitialMigration.cs</DependentUpon>

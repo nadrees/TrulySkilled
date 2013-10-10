@@ -50,9 +50,11 @@ window.chat = window.chat || (function () {
                 }
             });
         },
-        start: function () {
+        start: function (chatName) {
             $("#submit").removeAttr('disabled');
             $("#chat-input").removeAttr('disabled');
+
+            hub.server.joinChatGroup(chatName + '-chat');
         }
     }
 }());

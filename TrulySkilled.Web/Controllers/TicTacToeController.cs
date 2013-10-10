@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using TrulySkilled.Game.TicTacToe;
@@ -8,7 +9,7 @@ using TrulySkilled.Web.ViewModels.Game;
 
 namespace TrulySkilled.Web.Controllers
 {
-    public class TicTacToeController : Controller
+    public class TicTacToeController : Controller, IGameController
     {
         [Authorize]
         public ActionResult Index()
@@ -19,40 +20,27 @@ namespace TrulySkilled.Web.Controllers
         [Authorize]
         public ActionResult Game(Guid id)
         {
-            int? playerId = null;
+            /**
+            ActionResult result = RedirectToAction("Index");
 
-            using (var db = new TrulySkilledDbContext())
+            TicTacToeGame game;
+            if (TicTacToeGameHub.GamesInProgress.TryGetValue(id, out game) && game != null)
             {
-                var player = (from p in db.Players
-                              where p.User.UserName == User.Identity.Name
-                              select p)
-                             .FirstOrDefault();
-
-                if (player == null)
+                if (game.Players.Any(p => p.PlayerName == User.Identity.Name && !p.PlayerLeft))
                 {
-                    player = new PlayerModel
-                    {
-                        Game = (from g in db.Games
-                                where g.Name == GameNames.TicTacToe
-                                select g)
-                                .First(),
-                        User = (from u in db.UserProfiles
-                                where u.UserName == User.Identity.Name
-                                select u)
-                               .First()
-                    };
-                    db.Players.Add(player);
-                    db.SaveChanges();
+                    result = View(id);
                 }
-
-                playerId = player.Id;
             }
 
-            TicTacToeHub.GamesInProgress.AddOrUpdate(id,
-                new TicTacToeGame(playerId.Value),
-                (_, game) => { game.AddPlayer(playerId.Value); return game; });
+            return result;
+             */
+            return View(id);
+        }
 
-            return View(new PlayGameViewModel { GameId = id, PlayerId = playerId.Value });
+        
+        public void RegisterGame(Guid gameId, IEnumerable<string> players)
+        {
+            //TicTacToeGameHub.GamesInProgress.TryAdd(gameId, new TicTacToeGame(players));
         }
     }
 }

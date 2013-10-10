@@ -8,6 +8,7 @@ namespace TrulySkilled.Web
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.IgnoreRoute("{controller}/RegisterGame"); // disallow registering games from outside
 
             routes.MapRoute(
                 name: "Default",

@@ -51,10 +51,11 @@
                 };
             }
 
-            function user(name) {
+            function user(name, connectionId) {
                 var self = this;
 
                 self.name = name;
+                self.connectionId = connectionId;
                 self.isSelf = (name == username);
             }
 
@@ -121,12 +122,12 @@
             // -------- End Event Handlers ---------
 
             // -------- IO ---------
-            var hub = $.connection.gameLobbyHub;
+            var hub = $.connection.ticTacToeLobbyHub;
             hub.client.addUsers = function (names) {
                 // called when a new user enters the chat room
-                console.log('Adding users ' + names);
-                $.each(names, function (index, name) {
-                    vm.users.push(new user(name));
+                console.log('Adding users ' + JSON.stringify(names));
+                $.each(names, function (index, userRef) {
+                    vm.users.push(new user(userRef.Username, userRef.ConnectionId));
                 });
             };
             hub.client.removeUser = function (name) {
@@ -192,7 +193,8 @@
             ko.applyBindings(vm);
 
             $.connection.hub.start().done(function () {
-                window.chat.start();
+                window.chat.start('tic-tac-toe-lobby');
+                hub.server.ready();
             });
         });
     </script>
