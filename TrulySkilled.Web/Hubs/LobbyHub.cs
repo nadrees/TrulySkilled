@@ -43,30 +43,21 @@ namespace TrulySkilled.Web.Hubs
         /// Issues a challenge to the target user
         /// </summary>
         /// <param name="username">The user being challenged by the current user</param>
-        public void Challenge(String username)
+        public void Challenge(String connectionId)
         {
-            /*
-            String connectionId;
-            usersOnline.TryGetValue(username, out connectionId);
-
-            if (connectionId != null)
+            bool alreadyHasChallenge = false;
+            challenges.AddOrUpdate(Context.ConnectionId, connectionId, (_1, currentChallenge) =>
             {
-                String currentUserName = Context.GetCurrentUserName();
+                alreadyHasChallenge = true;
+                return currentChallenge;
+            });
 
-                bool hasChallenge = false;
-                challenges.AddOrUpdate(currentUserName, username, (_, existingUserName) =>
-                {
-                    hasChallenge = true;
-                    return existingUserName;
-                });
-
-                if (!hasChallenge)
-                {
-                    Clients.Client(connectionId).addChallenge(currentUserName);
-                    Clients.Caller.challengeSent(username);
-                }
+            String username;
+            if (!alreadyHasChallenge && connectionIdToUsernameMap.TryGetValue(connectionId, out username))
+            {
+                Clients.Client(connectionId).addChallenge(new User(Context.GetCurrentUserName(), Context.ConnectionId));
+                Clients.Caller.challengeSent(username);
             }
-             */
         }
 
         /// <summary>
@@ -75,62 +66,47 @@ namespace TrulySkilled.Web.Hubs
         /// <param name="username">The user who's challenge is being canceled.</param>
         public void CancelChallenge()
         {
-            /*
-            String currentUserName = Context.GetCurrentUserName();
-
-            String challengedUser;
-            if (challenges.TryRemove(currentUserName, out challengedUser) && challengedUser != null)
+            String challengedConnectionId;
+            if (challenges.TryRemove(Context.ConnectionId, out challengedConnectionId))
             {
-                String connectionId;
-                if (usersOnline.TryGetValue(challengedUser, out connectionId))
-                {
-                    Clients.Client(connectionId).cancelChallenge(challengedUser);
-                }
+                Clients.Client(challengedConnectionId).cancelChallenge(Context.GetCurrentUserName());
             }
-             */
         }
 
         /// <summary>
         /// Rejects another user's challenge
         /// </summary>
         /// <param name="username">The username of the user who originally issued the challenge</param>
-        public void RejectChallenge(String username)
+        public void RejectChallenge(String connectionId)
         {
-            /*
             String _;
-            if (challenges.TryRemove(username, out _))
+            if (challenges.TryRemove(connectionId, out _))
             {
-                String connectionId;
-                if (usersOnline.TryGetValue(username, out connectionId))
-                {
-                    Clients.Client(connectionId).rejectChallenge();
-                }
+                Clients.Client(connectionId).rejectChallenge();
             }
-             */
         }
 
         /// <summary>
         /// Accepts another user's challenge
         /// </summary>
         /// <param name="username">The username of the user who originally issued the challenge</param>
-        public void AcceptChallenge(String username)
+        public void AcceptChallenge(String connectionId)
         {
-            /*
             String _;
-            if (challenges.TryRemove(username, out _))
+            if (challenges.TryRemove(connectionId, out _))
             {
                 Guid gameId = Guid.NewGuid();
-                String connectionId;
-                if (usersOnline.TryGetValue(username, out connectionId))
+
+                String otherUsername;
+                if (connectionIdToUsernameMap.TryGetValue(connectionId, out otherUsername))
                 {
-                    new T().RegisterGame(gameId, new[] { username, Context.GetCurrentUserName() });
+                    new T().RegisterGame(gameId, new[] { otherUsername, Context.GetCurrentUserName() });
 
                     String randomGuid = gameId.ToString();
                     Clients.Client(connectionId).acceptChallenge(randomGuid);
                     Clients.Caller.acceptChallenge(randomGuid);
                 }
             }
-             */
         }
 
         #region Lifetime Events

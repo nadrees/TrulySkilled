@@ -15,6 +15,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             width: 87%;
+            vertical-align: middle;
         }
         .btn {
             margin-bottom: 10px;
@@ -31,23 +32,24 @@
             var username = "@User.Identity.Name";
 
             // ------ View Model ---------
-            function challenge(name) {
+            function challenge(name, connectionId) {
                 var self = this;
 
                 self.name = name;
+                self.connectionId = connectionId;
                 self.description = 'You have been challenged by ' + name;
 
                 self.acceptChallenge = function () {
                     console.log('accept challenge clicked');
 
-                    hub.server.acceptChallenge(self.name);
+                    hub.server.acceptChallenge(self.connectionId);
                 };
                 self.rejectChallenge = function () {
                     console.log('reject challenge clicked');
 
                     var challenge = findChallengeWithName(self.name);
                     vm.challengesReceived.remove(challenge);
-                    hub.server.rejectChallenge(self.name);
+                    hub.server.rejectChallenge(self.connectionId);
                 };
             }
 
@@ -144,18 +146,18 @@
                     vm.users.remove(userToRemove);
                 }
             };
-            hub.client.addChallenge = function (name) {
+            hub.client.addChallenge = function (user) {
                 // call when this user recieves a challenge from another user
-                console.log('add challenge called (' + name + ')');
+                console.log('add challenge called (' + JSON.stringify(user) + ')');
 
-                if (findChallengeWithName(name) == null) {
-                    var challengeModel = new challenge(name);
+                if (findChallengeWithName(user.Username) == null) {
+                    var challengeModel = new challenge(user.Username, user.ConnectionId);
                     vm.challengesReceived.push(challengeModel);
                 }
             };
             hub.client.challengeSent = function (name) {
                 // callback for when this user challenges another user
-                console.log('challenge sent called');
+                console.log('challenge sent called (' + name + ')');
                 vm.challenged(name);
                 vm.message('Challenge sent to ' + name + ', awaiting response...');
             };
@@ -234,9 +236,9 @@
     <!-- ko foreach: users -->
     <div class="span4 user-select">
         <!-- ko ifnot: isSelf -->
-        <input type="radio" name="player" data-bind="attr: { value: name }, checked: $parent.selected" />
+        <input type="radio" name="player" data-bind="attr: { value: connectionId, id: connectionId }, checked: $parent.selected" />
         <!-- /ko -->
-        <span class="user-name" data-bind="text: name"></span>
+        <label data-bind="attr: { for: connectionId }, text: name" class="user-name"></label>
     </div>
     <!-- /ko -->
 </div>
