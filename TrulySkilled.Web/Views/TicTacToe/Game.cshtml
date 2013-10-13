@@ -2,64 +2,80 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Tic-Tac-Toe";
+}
+
+@section styles {
+    <style type="text/css">
+        #gameBoard {
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+    </style>
 }
 
 @section scripts {
-    @Scripts.Render("~/bundles/signalr")
-    @Scripts.Render("~/bundles/knockout")
+    @Scripts.Render("~/bundles/TicTacToeBundle")
     <script type="text/javascript" src="~/signalr/hubs"></script>
     <script type="text/javascript">
         var gameId = "@Model";
 
         function viewModel() {
             var self = this;
+
+            self.gameHasStarted = ko.observable(false);
+
+            // info message
+            self.infoMessage = ko.observable();
+            self.infoMessageIsDismissable = ko.observable(true);
         }
 
         var hub = $.connection.ticTacToeGameHub;
         hub.client.setAwaitingPlayers = function (players) {
-            // called when this player has finished loading the page, but waiting
-            // on other players to finish
-            console.log('set awaiting players called (' + players + ')');
+            // called when a player arives in the lobby
+            var message = "Waiting for players ";
+            for (i = 0; i < players.length; i++) {
+                message += players[i];
+                if (i != players.length - 1) {
+                    message += ",";
+                }
+            }
+            message += " to arrive.";
+
+            vm.infoMessageIsDismissable(false);
+            vm.infoMessage(message);
         };
-        hub.client.startGame = function () {
-            // called when all players have finished loading the page
-            console.log('start game called');
-        };
-        hub.client.playerLeft = function (playerName) {
-            // called when a player leaves the game page
-            console.log('player left called (' + playerName + ')');
-        };
-        hub.client.startPlayerLeftTimer = function () {
-            // called when all other players have left the game
-            // but before the game has finished
-            console.log('start player left timer called');
-        };
-        hub.client.playerRejoined = function (playerName) {
-            // called when a player has rejoined the game
-            console.log('player rejoined called (' + playerName + ')');
-        };
-        hub.client.kickPlayer = function (playerName) {
-            // called when another player has been kicked from the game
-            console.log('kick player called (' + playerName + ')');
-        };
-        hub.client.setFinalRank = function (message) {
-            // called to display the results of the game
-            console.log('set final rank called (' + message + ')');
+        hub.client.beginGame = function() {
+            // called when game should be starting
+
+            vm.infoMessage(null);
+            vm.gameHasStarted(true);
         };
 
         var vm = new viewModel();
         window.chat.init(vm, hub);
+        window.board.init("gameBoard", 250, 250);
         ko.applyBindings(vm);
 
         $.connection.hub.start().done(function () {
-            window.chat.start();
+            window.chat.start('tic-tac-toe-' + gameId);
             hub.server.userArrived(gameId);
         });
     </script>
 }
 
-<div class="row-fluid">
+<div class="row-fluid" data-bind="visible: !gameHasStarted()">
     @Html.ActionLink("Return to lobby", "Index")
+</div>
+<div class="row-fluid" data-bind="visible: gameHasStarted">
+    <div id="gameBoard"></div>
+</div>
+<div class="row-fluid" data-bind="visible: infoMessage() != null && infoMessage().length > 0">
+    <div class="alert alert-info span12">
+        <span data-bind="text: infoMessage"></span>
+        <button type="button" class="close" id="info-close" data-bind="visible: infoMessageIsDismissable">&times;</button>
+    </div>
 </div>
 
 @Html.Partial("_Chat")

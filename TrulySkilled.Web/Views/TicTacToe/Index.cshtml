@@ -24,8 +24,7 @@
 }
 
 @section scripts {
-    @Scripts.Render("~/bundles/signalr")
-    @Scripts.Render("~/bundles/knockout")
+    @Scripts.Render("~/bundles/LobbyBundle")
     <script src="~/signalr/hubs"></script>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -186,7 +185,7 @@
                 // called when a challenge is accepted
                 console.log('accept challenge called');
 
-                window.location.href = '@Url.Action("Game")' + '/' + randomGuid;
+                window.location.href = '@Url.Action("Game")' + '?gameId=' + randomGuid;
             };
             // ---------- End IO -----------
 

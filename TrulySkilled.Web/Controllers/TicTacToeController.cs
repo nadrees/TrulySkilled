@@ -18,29 +18,26 @@ namespace TrulySkilled.Web.Controllers
         }
 
         [Authorize]
-        public ActionResult Game(Guid id)
+        public ActionResult Game(Guid gameId)
         {
-            /**
             ActionResult result = RedirectToAction("Index");
 
             TicTacToeGame game;
-            if (TicTacToeGameHub.GamesInProgress.TryGetValue(id, out game) && game != null)
+            if (TicTacToeGameHub.GamesInProgress.TryGetValue(gameId, out game))
             {
-                if (game.Players.Any(p => p.PlayerName == User.Identity.Name && !p.PlayerLeft))
+                if (game.Players.Any(p => p.PlayerName == User.Identity.Name))
                 {
-                    result = View(id);
+                    result = View(gameId);
                 }
             }
 
             return result;
-             */
-            return View(id);
         }
 
         
         public void RegisterGame(Guid gameId, IEnumerable<string> players)
         {
-            //TicTacToeGameHub.GamesInProgress.TryAdd(gameId, new TicTacToeGame(players));
+            TicTacToeGameHub.GamesInProgress.TryAdd(gameId, new TicTacToeGame(players));
         }
     }
 }

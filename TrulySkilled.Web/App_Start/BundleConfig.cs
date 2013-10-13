@@ -8,9 +8,8 @@ namespace TrulySkilled.Web
         {
             bundles.UseCdn = true;
 
-            bundles.Add(new StyleBundle("~/bundles/Content/site").Include(
-                "~/Content/site.css"));
-            bundles.Add(new StyleBundle("~/bundles/Content/bootstrap").Include(
+            bundles.Add(new StyleBundle("~/bundles/Content/css").Include(
+                "~/Content/site.css",
                 "~/Content/bootstrap/bootstrap.css",
                 "~/Content/bootstrap/bootstrap-responsive.css"));
             bundles.Add(new StyleBundle("~/bundles/Content/zocial").Include(
@@ -24,12 +23,17 @@ namespace TrulySkilled.Web
                 .Include("~/Scripts/jquery/jquery-{version}.js"));
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Scripts/bootstrap/bootstrap.js"));
-            bundles.Add(new ScriptBundle("~/bundles/signalr").Include(
-                "~/Scripts/signalr/jquery.signalR-{version}.js"));
-            bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
-                "~/Scripts/knockout/knockout-{version}.js"));
-            bundles.Add(new ScriptBundle("~/bundles/chat").Include(
+
+            bundles.Add(new ScriptBundle("~/bundles/LobbyBundle").Include(
+                "~/Scripts/signalr/jquery.signalR-{version}.js",
+                "~/Scripts/knockout/knockout-{version}.js",
                 "~/Scripts/chat/trulyskilled.chat.js"));
+            bundles.Add(new ScriptBundle("~/bundles/TicTacToeBundle").Include(
+                "~/Scripts/signalr/jquery.signalR-{version}.js",
+                "~/Scripts/knockout/knockout-{version}.js",
+                "~/Scripts/chat/trulyskilled.chat.js",
+                "~/Scripts/kinetic/kinetic-v{version}.js",
+                "~/Scripts/games/trulyskilled.tictactoe.js"));
         }
     }
 }
