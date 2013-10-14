@@ -280,6 +280,9 @@
     <Content Include="Scripts\knockout\knockout-2.3.0.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Scripts\linqjs\linq-vsdoc.js" />
+    <Content Include="Scripts\linqjs\linq.js" />
+    <Content Include="Scripts\linqjs\linq.min.js" />
     <Content Include="Scripts\signalr\jquery.signalR-1.1.3.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

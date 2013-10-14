@@ -41,16 +41,7 @@
         </div>
 
         @Scripts.Render("~/bundles/jquery")
-        <script type="text/javascript">
-            if (typeof jQuery == 'undefined') {
-                var e = document.createElement('script');
-                e.src = '@Url.Content("~/Scripts/jquery/jquery-1.10.2.js")';
-                e.type = 'text/javascript';
-                document.getElementsByTagName("head")[0].appendChild(e);
-            }
-        </script>
-
-        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/Core")
         @RenderSection("scripts", required: false)
     </body>
 </html>

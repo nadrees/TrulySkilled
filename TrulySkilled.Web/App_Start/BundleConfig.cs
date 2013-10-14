@@ -21,8 +21,9 @@ namespace TrulySkilled.Web
 
             bundles.Add(new ScriptBundle("~/bundles/jquery", "//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
                 .Include("~/Scripts/jquery/jquery-{version}.js"));
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                "~/Scripts/bootstrap/bootstrap.js"));
+            bundles.Add(new ScriptBundle("~/bundles/Core").Include(
+                "~/Scripts/bootstrap/bootstrap.js",
+                "~/Scripts/linqjs/linq.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/LobbyBundle").Include(
                 "~/Scripts/signalr/jquery.signalR-{version}.js",
