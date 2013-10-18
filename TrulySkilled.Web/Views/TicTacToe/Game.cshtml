@@ -26,6 +26,7 @@
             var self = this;
 
             self.gameHasStarted = ko.observable(false);
+            self.gameHasEnded = ko.observable(false);
 
             self.infoMessage = ko.observable();
             self.youInfo = ko.observable();
@@ -122,10 +123,16 @@
             console.log('set draw called');
 
             window.board.endGame();
+            vm.infoMessage("Game was a draw.");
+            vm.gameHasEnded(true);
         };
         hub.client.setWinner = function (details) {
             // called when a player wins a game
             console.log('set winner called (' + JSON.stringify(details) + ')');
+
+            window.board.endGame(details.WinningLine);
+            vm.infoMessage(details.Name + " won!");
+            vm.gameHasEnded(true);
         };
 
         var vm = new viewModel();
@@ -140,7 +147,7 @@
     </script>
 }
 
-<div class="row-fluid" data-bind="visible: !gameHasStarted()">
+<div class="row-fluid" data-bind="visible: !gameHasStarted() || gameHasEnded()">
     @Html.ActionLink("Return to lobby", "Index")
 </div>
 <div class="row-fluid" data-bind="visible: infoMessage() != null && infoMessage().length > 0">

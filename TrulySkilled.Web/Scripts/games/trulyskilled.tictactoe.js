@@ -20,6 +20,15 @@ window.board = window.board || (function () {
         };
     }
 
+    function getSquareMiddle(square) {
+        var x = square.getX();
+        var y = square.getY();
+        var width = square.getWidth();
+        var heigh = square.getHeight();
+
+        return [x + (width / 2), y + (heigh / 2)];
+    }
+
     function setRectValue(square, value) {
         if (square.value == null && value != null) {
             square.value = value;
@@ -170,13 +179,27 @@ window.board = window.board || (function () {
     }
 
     function endGame(winningLine) {
-        debugger
-        $.each(squares, function (index, square) {
-            square.remove();
-        });
+        for (i = 0; i < 3; i++) {
+            for (j = 0; j < 3; j++) {
+                var square = squares.getSquare(i, j);
+                square.remove();
+            }
+        }
 
         if (winningLine) {
+            var points = [];
+            for (i = 0; i < 3; i++) {
+                var squareX = winningLine[i][0];
+                var squareY = winningLine[i][1];
 
+                points.push(getSquareMiddle(squares.getSquare(squareX, squareY)));
+            }
+
+            layer.add(new Kinetic.Line({
+                points: points,
+                stroke: 'Red',
+                strokeWidth: 5
+            }));
         }
     }
 

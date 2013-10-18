@@ -9,6 +9,7 @@ namespace TrulySkilled.Web
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.IgnoreRoute("{controller}/RegisterGame"); // disallow registering games from outside
+            routes.IgnoreRoute("{controller}/RecordResults"); // disallow recording game results from outside
 
             routes.MapRoute(
                 name: "Default",

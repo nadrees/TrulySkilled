@@ -76,6 +76,9 @@ namespace TrulySkilled.Web.Hubs.TicTacToe
                             Clients.Group(groupName).UpdateBoard(game.GetCurrentBoard());
                             if (game.GameHasFinished)
                             {
+                                TicTacToeGame _;
+                                GamesInProgress.TryRemove(gameId, out _);
+
                                 var finalRank = game.Players.OrderBy(p => p.Rank).ToList();
                                 if (finalRank[0].Rank == finalRank[1].Rank)
                                     Clients.Group(groupName).SetDraw();

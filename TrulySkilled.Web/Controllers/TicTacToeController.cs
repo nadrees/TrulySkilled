@@ -34,7 +34,17 @@ namespace TrulySkilled.Web.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Not routable.
+        /// </summary>
+        public void RecordResults(Dictionary<String, int> playerRanks)
+        {
+            // TODO
+        }
         
+        /// <summary>
+        /// Not routable.
+        /// </summary>
         public void RegisterGame(Guid gameId, IEnumerable<string> players)
         {
             TicTacToeGameHub.GamesInProgress.TryAdd(gameId, new TicTacToeGame(players));
