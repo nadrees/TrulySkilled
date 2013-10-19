@@ -221,8 +221,13 @@
     <Compile Include="Migrations\201310051930028_GameModels.Designer.cs">
       <DependentUpon>201310051930028_GameModels.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201310190424317_RelationshipUpdates.cs" />
+    <Compile Include="Migrations\201310190424317_RelationshipUpdates.Designer.cs">
+      <DependentUpon>201310190424317_RelationshipUpdates.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\Defaults.cs" />
     <Compile Include="Models\GameModel.cs" />
     <Compile Include="Models\MatchModel.cs" />
     <Compile Include="Models\PlayerModel.cs" />
@@ -341,6 +346,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201310051930028_GameModels.resx">
       <DependentUpon>201310051930028_GameModels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201310190424317_RelationshipUpdates.resx">
+      <DependentUpon>201310190424317_RelationshipUpdates.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

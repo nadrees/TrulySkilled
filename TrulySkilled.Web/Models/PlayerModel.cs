@@ -20,6 +20,6 @@ namespace TrulySkilled.Web.Models
         public virtual GameModel Game { get; set; }
         public virtual UserProfile User { get; set; }
 
-        public virtual IEnumerable<TeamModel> Teams { get; set; }
+        public virtual ICollection<TeamModel> Teams { get; set; }
     }
 }

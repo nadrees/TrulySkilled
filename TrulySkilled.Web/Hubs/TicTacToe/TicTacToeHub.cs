@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using TrulySkilled.Game.TicTacToe;
+using TrulySkilled.Web.Controllers;
 
 namespace TrulySkilled.Web.Hubs.TicTacToe
 {
@@ -58,8 +60,10 @@ namespace TrulySkilled.Web.Hubs.TicTacToe
             }
         }
 
-        public void SquareClicked(int x, int y, String symbol)
+        public async Task SquareClicked(int x, int y, String symbol)
         {
+            Dictionary<int, List<String>> finalResults = null;
+
             Guid gameId;
             if (ConnectionIdToGameIdMap.TryGetValue(Context.ConnectionId, out gameId))
             {
@@ -81,7 +85,9 @@ namespace TrulySkilled.Web.Hubs.TicTacToe
 
                                 var finalRank = game.Players.OrderBy(p => p.Rank).ToList();
                                 if (finalRank[0].Rank == finalRank[1].Rank)
+                                {
                                     Clients.Group(groupName).SetDraw();
+                                }
                                 else
                                 {
                                     Clients.Group(groupName).SetWinner(new
@@ -90,6 +96,10 @@ namespace TrulySkilled.Web.Hubs.TicTacToe
                                         WinningLine = game.GetWinningLine()
                                     });
                                 }
+
+                                finalResults = new Dictionary<int, List<string>>();
+                                foreach (var player in game.Players)
+                                    finalResults.Add(player.Rank.Value, new List<String> { player.PlayerName });
                             }
                             else
                                 Clients.Group(groupName).SetPlayerTurn(game.Players[game.CurrentPlayersTurn].PlayerName);
@@ -101,6 +111,9 @@ namespace TrulySkilled.Web.Hubs.TicTacToe
                     }
                 }
             }
+
+            if (finalResults != null)
+                await new TicTacToeController().RecordResults(finalResults);
         }
 
         private TicTacToeGame GetGame(Guid gameId)

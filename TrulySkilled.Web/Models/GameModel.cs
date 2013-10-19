@@ -11,9 +11,9 @@ namespace TrulySkilled.Web.Models
             return new GameModel
             {
                 Name = name,
-                Beta = 25.0 / 6.0,
-                DrawProbability = .10,
-                DynamicsFactor = 25.0 / 300.0
+                Beta = Defaults.DefaultBeta,
+                DrawProbability = Defaults.DefaultDrawProbability,
+                DynamicsFactor = Defaults.DefaultDynamicsFactor
             };
         }
 
@@ -25,9 +25,9 @@ namespace TrulySkilled.Web.Models
         public double DrawProbability { get; set; }
         public double DynamicsFactor { get; set; }
 
-        public virtual IEnumerable<PlayerModel> Players { get; set; }
-        public virtual IEnumerable<MatchModel> Matches { get; set; }
-        public virtual IEnumerable<TeamModel> Teams { get; set; }
+        public virtual ICollection<PlayerModel> Players { get; set; }
+        public virtual ICollection<MatchModel> Matches { get; set; }
+        public virtual ICollection<TeamModel> Teams { get; set; }
     }
 
     public class GameNames

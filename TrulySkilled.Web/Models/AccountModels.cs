@@ -12,7 +12,7 @@ namespace TrulySkilled.Web.Models
         public int UserId { get; set; }
         public string UserName { get; set; }
 
-        public virtual IEnumerable<PlayerModel> PlayerRecords { get; set; }
+        public virtual ICollection<PlayerModel> PlayerRecords { get; set; }
     }
 
     public class RegisterExternalLoginModel
