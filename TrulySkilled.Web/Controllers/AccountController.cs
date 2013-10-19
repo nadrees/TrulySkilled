@@ -1,7 +1,9 @@
 ﻿using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Transactions;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -117,7 +119,7 @@ namespace TrulySkilled.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult ExternalLoginConfirmation(RegisterExternalLoginModel model, string returnUrl)
+        public async Task<ActionResult> ExternalLoginConfirmation(RegisterExternalLoginModel model, string returnUrl)
         {
             string provider = null;
             string providerUserId = null;
@@ -132,13 +134,13 @@ namespace TrulySkilled.Web.Controllers
                 // Insert a new user into the database
                 using (TrulySkilledDbContext db = new TrulySkilledDbContext())
                 {
-                    UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
+                    UserProfile user = await db.UserProfiles.FirstOrDefaultAsync(u => u.UserName.ToLower() == model.UserName.ToLower());
                     // Check if user already exists
                     if (user == null)
                     {
                         // Insert name into the profile table
                         db.UserProfiles.Add(new UserProfile { UserName = model.UserName });
-                        db.SaveChanges();
+                        await db.SaveChangesAsync();
 
                         OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
                         OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
